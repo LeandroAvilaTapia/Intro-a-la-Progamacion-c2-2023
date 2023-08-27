@@ -1,0 +1,70 @@
+program {
+    PonerGuardaDe5Azulejos()
+}
+procedure PonerGuardaDe5Azulejos(){
+    
+    /*
+    Proposito:
+        Arma una "guarda" de 5 azulejos.
+        Pone 1 azulejos desde la celda actual hacia el este para armar una guarda
+    Precondicion:
+        Tiene que haber al menos 4 celdas hacia el este
+    */
+    Poner1Azulejo()
+    Mover(Este)
+    Poner1Azulejo()
+    Mover(Este)
+    Poner1Azulejo()
+    Mover(Este)
+    Poner1Azulejo()
+    Mover(Este)
+    Poner1Azulejo()
+}
+
+procedure Poner1Azulejo(){
+    /*
+    Proposito:
+        Pone 1 azulejo en la celda actual
+    Precondicion:
+        ninguna
+    Observaciones:
+        Un azulejo esta conformado por 9 bolitas rojas, 1 bolita verde y 5 bolitas negras
+    */
+    Poner(Verde)
+    Poner9Rojas()
+    Poner5Negras()
+}
+
+procedure Poner9Rojas(){
+    /*
+    Proposito:
+        Pone 9 bolitas rojas en la celda actual
+    Precondicion:
+        ninguna
+    */
+    Poner(Rojo)
+    Poner(Rojo)
+    Poner(Rojo)
+    Poner(Rojo)
+    Poner(Rojo)
+    Poner(Rojo)
+    Poner(Rojo)
+    Poner(Rojo)
+    Poner(Rojo)
+}
+procedure Poner5Negras(){
+    /*
+    Proposito:
+        Pone 5 bolitas negras en la celda actual
+    Precondicion:
+        ninguna
+    */
+    Poner(Negro)
+    Poner(Negro)
+    Poner(Negro)
+    Poner(Negro)
+    Poner(Negro)
+}
+//----------------------Ejercicio 2---------------------------
+
+
