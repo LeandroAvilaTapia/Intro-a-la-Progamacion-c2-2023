@@ -1,0 +1,104 @@
+program{
+    EscribirFecha___(12,2,1998)
+}
+//---------------------Ejercicio1--------------------------------
+procedure Mover3VecesAl_(direcciónAMover){
+    /*
+    Proposito
+        Mueve el cabezal 3 celdas hacia **direcciónAMover
+    Precondicion
+        Tiene que haber al menos 3 celdas hacia la direccion **direcciónAMover
+    Parametro
+        **direcciónAMover:Direccion
+    */
+    repeat(3){
+        Mover(direcciónAMover)
+    }
+}
+//---------------------Ejercicio2--------------------------------
+procedure Poner_Al_(colorAPoner, direcciónHaciaDondePoner){
+    /*
+    Proposito
+        Pone una bolita de color **colorAPoner en la celda lindante hacia la direccion
+        **direcciónHaciaDondePoner
+    Precondicion
+        Tiene que haber al menos 1 celda hacia la direccion **direcciónHaciaDondePoner
+    Parametro
+        **colorAPoner:Color
+        **direcciónHaciaDondePoner:Direccion
+    */
+    Mover(direcciónHaciaDondePoner)
+    Poner(colorAPoner)
+}
+//---------------------Ejercicio5--------------------------------
+procedure EscribirFecha___(dia, mes, año){
+    /*
+    Proposito
+        Pone una fecha, que esta representada por el dia **dia, mes **me y año **año
+        **direcciónHaciaDondePoner
+    Precondicion
+        Tiene que haber al menos 2 celdas hacia el Este y que estas celdas y la celda actual este vacias
+        Si el mes es 1, 3, 5, 7, 8, 10 o 12 el dia tiene ser un numero entre el 1 y 31
+        Si el mes es 2, el dia tiene ser un numero entre el 1 y 28
+        Si el mes es 4,6,9 o 11 el dia tiene ser un numero entre el 1 y 31
+    Parametro
+        **dia:Numero
+        **mes:Numero
+        **año:Numero
+    Oberservaciones
+        El dia esta representado por bolitas azules
+        el mes esta representado por bolitas rojas
+        el año esta representado por bolitas verdes
+    */
+    PonerDia_(dia)
+    Mover(Este)
+    PonerMes_(mes)
+    Mover(Este)
+    PonerAño_(año)
+}
+procedure PonerDia_(dia){
+    /*
+    Proposito
+        Pone el dia **dia
+    Precondicion
+        la celda actual tiene que estar vacia
+    Parametro
+        **dia:Numero
+    Oberservaciones
+        El dia esta representado por bolitas azules
+    */
+    repeat(dia){
+        Poner(Azul)
+    }
+}
+procedure PonerMes_(mes){
+    /*
+    Proposito
+        Pone el mes **mes
+    Precondicion
+        la celda actual tiene que estar vacia
+    Parametro
+        **mes:Numero
+    Oberservaciones
+        el mes esta representado por bolitas rojas
+    */
+    repeat(mes){
+        Poner(Rojo)
+    }
+}
+procedure PonerAño_(año){
+    /*
+    Proposito
+        Pone el año **año
+    Precondicion
+        la celda actual tiene que estar vacia
+    Parametro
+        **año:Numero
+    Oberservaciones
+        el año esta representado por bolitas verdes
+    */
+    repeat(año){
+        Poner(Verde)
+    }
+}
+
