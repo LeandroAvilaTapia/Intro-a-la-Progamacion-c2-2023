@@ -1,0 +1,75 @@
+//-------------------ejercicio 9  BIBLIOTECA------------------
+procedure Mover_VecesAl_(cantidad, dirección){
+    /*
+    Proposito
+        Mueve el cabezal **cantidad veces hacia la direccion **direccion
+    Precondicion
+        Tiene que haber al menos **cantidad de celdas hacia la direccion **direccion
+    Parametro
+        **cantidad: Numero
+        **direccion:Direccion
+    */
+    repeat(cantidad){
+        Mover(dirección)
+    }
+}
+
+procedure Poner_DeColor_(cantidad, color){
+    /*
+    Proposito
+        Pone **cantidad bolitas de color **color
+    Precondicion
+        ninguna
+    Parametro
+        **cantidad: Numero
+        **color:Color
+    */
+    repeat(cantidad){
+        Poner(color)
+    }
+}
+
+procedure Sacar_DeColor_(cantidad, color){
+    /*
+    Proposito
+        Saca **cantidad bolitas de color **color
+    Precondicion
+        Tiene que haber al menos **cantidad bolitas de color **color
+    Parametro
+        **cantidad: Numero
+        **color:Color
+    */
+    repeat(cantidad){
+        Poner(color)
+    }
+}
+
+//-------------------ejercicio 10  BIBLIOTECA------------------
+procedure IrAEsquina_Y_(primeraDirección, segundaDirección){
+    /*
+    Proposito
+        Mueve el cabezal hacia el borde **primeraDirección y el borde **segundaDirección
+    Precondicion
+        las direcciones **primeraDirección y ** segundaDirección
+        tienen que ser distintas y opuestas
+    Parametro
+        **primeraDirección: Numero
+        **color:Color
+    */
+    IrAlBorde(primeraDirección)
+    IrAlBorde(segundaDirección)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
