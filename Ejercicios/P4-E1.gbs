@@ -1,0 +1,42 @@
+program{
+    DibujarBanda_EnDiagonalNEDe_x_(Rojo,2,2)
+}
+
+procedure DibujarBanda_EnDiagonalNEDe_x_(color, alto, largo){
+    /*
+    Proposito
+        Dibuja una banda de color *color* en la diagonal noroeste de un largo total de *largo* celdas
+        y *alto* celdas de alto
+    Precondicion
+        Tiene que haber al menos *largo* celdas al Este incluyendo la celda actual
+        y *alto* celdas al Norte. Estas celdas tiene que estar vacias.
+    Parametro
+        **color:Color
+        **alto:Numero
+        *largo:Numero
+    */
+    repeat(largo-1){
+        PonerColumna_DeAlto_(color,alto)
+        Mover(Este)
+    }
+    PonerColumna_DeAlto_(color,alto)
+}
+procedure PonerColumna_DeAlto_(colorAPoner,altoColumna){
+    /*
+    Proposito
+        Pone una columna de color *color de *altoColumna celdas de alto
+    Precondicion
+        Tiene que haber al menos *altoColumna-1 celdas al Norte
+    Parametro
+        **color:Color
+        **altoColumna:Numero
+    */
+    repeat(altoColumna-1){
+        Poner(colorAPoner)
+        Mover(Norte)
+    }
+    Poner(colorAPoner)
+    repeat(altoColumna-2){
+        Mover(Sur)
+    }
+}
