@@ -1,0 +1,410 @@
+program{
+    Depositar_EnMoneda_ComoPesos(10, euro())
+    ExtraerHasta_EnMoneda_(15, euro()) 
+    
+}
+//------------------Ejercicio1----------------------
+/*
+a.A)V -B)V  -C)F
+b.A)F -B)F  -C)V 
+c.A)F -B)V  -C)V
+d.A)F -B)V  -C)F
+e.A)F -B)V  -C)V
+f.A)F -B)V  -C)V
+g.A)F -B)V  -C)V
+
+*/
+  
+//------------------Ejercicio2a----------------------
+function hayMasDe5DeColor_(){
+    /*
+    Proposito:
+        Describe si en la celda actual hay mas de 5 bolitas
+    Precondicion
+        ninguna
+    Tipo 
+        Booleano
+    */
+    return (totalDeBolitasEnCeldaActual>5)
+}
+
+function totalDeBolitasEnCeldaActual(){
+   /*
+    Proposito:
+        Describe el total de bolitas que hay en la celda actual
+    Precondicion
+        ninguna
+    Tipo 
+        Numero
+    */ 
+    return (nroBolitas(Negro)+nroBolitas(Rojo)+nroBolitas(Verde)+nroBolitas(Azul))
+}
+//------------------Ejercicio2b----------------------
+function hayAlMenos5DeColor_(color){
+    /*
+    Proposito:
+        Describe si en la celda actual hay al menos 5 bolitas
+        de color *color
+    Precondicion
+        ninguna
+    Parametro:
+        **color:Color
+    Tipo
+        Booleano
+    */
+    return (totalDeBolitasEnCeldaActual>=5)
+}
+//------------------Ejercicio2c----------------------
+function hayAlMenos5DeColor_YEstoyEnElBordeEste(color){
+    /*
+    Proposito:
+        Describe si en la celda actual hay mas de 5 bolitas
+        de color *color y ademas estoy en el borde Este
+    Precondicion
+        ninguna
+    Parametro: 
+        **color:Color
+    Tipo
+        Booleano
+    */
+    return (hayAlMenos5DeColor_(color) && not puedeMover(Este))
+}
+//------------------Ejercicio2d----------------------
+function hayUnaCeldaLindanteAlNorteOAlEste(){
+    /*
+    Proposito:
+        Describe si hay una celda lindante al este o al norte de la celda actual
+    Precondicion
+        ninguna
+    Tipo
+        Booleano
+    */
+    return (puedeMover(Este)||puedeMover(Norte))
+}
+//------------------Ejercicio2e----------------------
+function hayBolitasDeTodosLosColores(){
+    /*
+    Proposito:
+        Describe si hay al menos un bolita de cada color en la celda actual
+    Precondicion
+        ninguna
+    Tipo
+        Booleano
+    */
+    return (hayBolitas(Verde)&&hayBolitas(Rojo)&&hayBolitas(Verde)&&hayBolitas(Negro))
+}
+//------------------Ejercicio2f----------------------
+function faltaAlMenosUnaBolitaDeAlgunColor(){
+    /*
+    Proposito:
+        Describe si falta al menos una bolita de algun color en la celda actual
+    Precondicion
+        ninguna
+    Tipo
+        Booleano
+    */
+    return (not hayBolitasDeTodosLosColores())
+    //return (not hayBolitas(Verde)||not hayBolitas(Rojo)||not hayBolitas(Verde)||not hayBolitas(Negro))
+}
+//------------------Ejercicio5a----------------------
+procedure Poner_Si_(color, condicion){
+    /*
+    Proposito:
+        Pone una bolita de color **color en la celda actual si la condicion **condicion es verdadera
+    Precondicion
+        ninguna
+    Parametro:
+        **color:Color
+        **condicion:Booleano
+    */
+    if(condicion){
+        Poner(color)
+    }
+}
+//------------------Ejercicio5b----------------------
+procedure Sacar_Si_(color, condicion){
+    /*
+    Proposito:
+        Saca una bolita de color **color en la celda actual si la condicion **condicion es verdadera
+    Precondicion
+        tiene que haber al menos una bolita de color **color
+    Parametro:
+        **color:Color
+        **condicion:Booleano
+    */
+    if(condicion){
+        Sacar(color)
+    }
+}
+//------------------Ejercicio5b----------------------
+procedure Mover_Si_(direccion, condicion){
+    /*
+    Proposito:
+        Mueve el cabezal hacia la direccion **direccion si la condicion **condicion es verdadera
+    Precondicion
+        ninguna
+    Parametro:
+        **color:Color
+        **condicion:Booleano
+    */
+    if(condicion){
+        Mover(direccion)
+    }
+}
+//------------------Ejercicio7----------------------
+function esCeldaVacía(){
+    /*
+    Proposito:
+        Indica si la celda actual esta vacia
+    Precondicion
+        ninguna
+    Tipo
+        Booleano 
+    */
+    return (not (hayBolitas(Verde)||hayBolitas(Rojo)||hayBolitas(Verde)||hayBolitas(Negro) ))
+    //return (not hayBolitas(Verde)||not hayBolitas(Rojo)||not hayBolitas(Verde)||not hayBolitas(Negro))
+}
+function hayAlMenosUnaDeCada(){
+    /*
+    Proposito:
+        Indica si en la celda actual hay al menos una bolita de cada color
+    Precondicion
+        ninguna
+    Tipo
+        Booleano 
+    */
+    return (nroBolitas(Rojo)>=1 && nroBolitas(Verde)>=1 && nroBolitas(Negro)>=1 && nroBolitas(Azul)>=1 )
+}
+function esCeldaConBolitas(){
+    /*
+    Proposito:
+        Indica si en la celda actual hay al menos una bolita
+    Precondicion
+        ninguna
+    Tipo
+        Booleano 
+    */
+     return (hayBolitas(Rojo) || hayBolitas(Verde) || hayBolitas(Negro) || hayBolitas(Azul))
+}
+  
+//------------------Ejercicio12----------------------
+/*
+bolitas negras para pesos argentinos.
+bolitas verdes para dólares estadounidenses.
+bolitas azules para euros.
+bolitas rojas para yuanes chinos.
+*/
+procedure Depositar_EnMoneda_ComoPesos(cantidadADepositar, moneda){
+    /*
+    Proposito:
+        Deposita pesos argentinos equivalente a la conversion de *cantidadADepositar* *moneda*
+    Precondicion:
+        La cantidad dada tiene que ser mayor o igual a 0
+    Parametro:
+        *cantidadADepositar*:Numero
+        *moneda*:Color
+    Observaciones:
+    1 dolar equivale a 80 pesos argentinos, 1 euro equivale a 90 pesos argentinos y 1 yuan equivale a 12 pesos argentinos.
+    Color verde es el dolar, el color azul es el euro y el rojo es el yuan
+    */
+    if(moneda==Verde){ 
+         Depositar_Pesos(convertirAPesos_CotizandoA_(cantidadADepositar, 80))
+    }
+    if (moneda == Azul){
+        Depositar_Pesos(convertirAPesos_CotizandoA_(cantidadADepositar, 90))
+    }
+    if(moneda == Rojo){
+        Depositar_Pesos(convertirAPesos_CotizandoA_(cantidadADepositar, 12))
+    }
+}
+
+procedure Depositar_Pesos(cantidadPesos){
+    /*
+    Proposito:
+        Deposita la cantidad de *cantidadPesos* Pesos Argentinos en la cuenta actual
+    Precondicion:
+        La cantidad dada tiene que ser mayor o igual a 0
+    Parametro:
+        *cantidadDePesos*:Numero:
+    */
+    repeat(cantidadPesos){
+        Poner(Negro)
+    }
+}
+
+function convertirAPesos_CotizandoA_(cantidadADepositar, valorCotizado){
+    /*
+    Proposito:
+        Describe la cantidad pesos argentinos equivalente a la conversion
+        de *cantidadADepositar* a valor *valorCotizado*
+    Precondicion:
+        Las cantidades dadas tiene que ser mayor o igual a 0
+    Parametro:
+        *cantidadADepositar*:Numero
+        *valorCotizado*:Numero
+    Tipo:
+        Numero
+    */
+    return (cantidadADepositar*valorCotizado)
+}
+
+procedure ExtraerHasta_EnMoneda_(cantidadAExtraer, moneda){
+    /*
+    Proposito:
+        Extrae *cantidadAExtraer* *moneda* de la cuenta actual, si
+        la cantidad que hay en la cuenta es menor a la cantidad de *cantidadAExtraer* se extrae
+        todo lo que haya de la moneda dada
+    Precondicion:
+    ninguna
+    Parametro:
+        *cantidadAExtraer*:Numero
+        *moneda*:Color
+    */
+    if(cantidadAExtraer >= cantidadDeMoneda_(moneda)){
+        Extraer_EnMoneda_(cantidadDeMoneda_(moneda), moneda)
+        } else {
+            Extraer_EnMoneda_(cantidadAExtraer, moneda)
+          }
+        
+    
+}
+procedure Extraer_EnMoneda_(cantidadAExtraer, moneda){
+    /*
+    Proposito:
+        Extrae *cantidadAExtraer* *moneda* de la cuenta actual
+    Precondicion:
+    Tiene que haber como minimo la cantidad *cantidadAExtraer* en la moneda *moneda* en 
+    la cuenta actual
+    Parametro:
+        *cantidadAExtraer*:Numero
+        *moneda*:Color
+    */
+    repeat(cantidadAExtraer){
+        Sacar(moneda)
+    }
+}
+function cantidadDeMoneda_(moneda){
+    /*
+    Proposito:
+        Describe la cantidad *moneda* que hay en la cuenta actual
+    Precondicion:
+        ninguna
+    Parametro:
+        *moneda*:Color
+    Tipo:
+        Numero
+    */
+    return (nroBolitas(moneda))
+}
+
+function dolar(){
+    return (Verde)
+}
+function euro(){
+    return (Azul)
+}
+function yuan(){
+    return (Rojo)
+}
+
+  
+//------------------Ejercicio9----------------------
+/* sePuedeAterrizarA_Hacia_(distanciaAPlaneta,direcciónAPlaneta), que asumiendo que el cabezal se encuentra sobre la
+nave y hay al menos distanciaAPlaneta celdas en dirección direcciónAPlaneta, indica si hay un planeta a distanciaAPlaneta en la
+dirección direcciónAPlaneta y sí el combustible es suficiente para llegar al mismo.
+La nave consume una única unidad de combustibe por cada celda que deba moverse*/
+function sePuedeAterrizarA_Hacia_(distanciaAPlaneta,direcciónAPlaneta){
+    /*
+    Proposito:
+        Indica si se puede aterrizar en el planeta que esta a una distancia **distanciaAPlaneta hacia la direccion **direcciónAPlaneta
+        y si es suficiente para llegar a ese planeta
+    Precondicion: ninguna
+    Parametro:
+        **distanciaAPlaneta:Numero:indica la cantidad de celdas a la que esta el planeta
+        **direcciónAPlaneta:Direccion:indica la direccion a la que esta el planeta
+    Tipo:
+        Booleano
+    */
+    return (hayUnPlanetaA_Hacia_(distanciaAPlaneta, direcciónAPlaneta) && alcanzaElCombustible(distanciaAPlaneta,combustibleRestante) )
+} 
+
+function alcanzaElCombustible(distancia,combustible){
+    /*
+    Proposito:
+        Indica si es suficiente el combustible para moverse a una distancia **distancia celdas
+    Precondicion:
+        Tanto el combustible y la distancia tiene que ser mayor o igual a cero
+    Parametro:
+        **distancia:Numero:indica la cantidad de celdas a la que esta el planeta
+        **combustible:Numero:indica el combustible que tiene la nave
+    Tipo:
+        Booleano
+    */
+    return (distancia<=combustible)
+}
+//------------------Ejercicio9b----------------------
+/*
+Sabiendo que el cabezal se encuentra sobre la nave y a exactamente 3 celdas
+de distancia de todos los bordes, se pide que escriba la función
+hayUnPlanetaRecto(), que indica que existe un planeta en cualquiera de
+las direcciones, a cualquier distancia desde la nave.
+*/
+
+function hayUnPlanetaRecto(){
+    /*
+    Proposito:
+        Indica si hay un planeta hacia cualquiera de las 4 direcciones y a una distancia menor a 4
+    Precondicion:
+        ninguna
+    Tipo:
+        Booleano
+    */
+    return(hayPlanetaAlNorte() || hayPlanetaAlSur() || hayPlanetaAlEste() || hayPlanetaAlOeste())
+}
+function hayPlanetaAlNorte(){
+    /*
+    Proposito:
+        Indica si hay un planeta hacia el norte y a una distancia menor a 4
+    Precondicion:
+        ninguna
+    Tipo:
+        Booleano
+    */
+    return(hayUnPlanetaA_Hacia_(1, Norte) || return(hayUnPlanetaA_Hacia_(2, Norte) || return(hayUnPlanetaA_Hacia_(3, Norte))
+}
+function hayPlanetaAlSur(){
+    /*
+    Proposito:
+        Indica si hay un planeta hacia el sur y a una distancia menor a 4
+    Precondicion:
+        ninguna
+    Tipo:
+        Booleano
+    */
+    return(hayUnPlanetaA_Hacia_(1, Sur) || return(hayUnPlanetaA_Hacia_(2, Sur) || return(hayUnPlanetaA_Hacia_(3, Sur))
+}
+function hayPlanetaAlEste(){
+    /*
+    Proposito:
+        Indica si hay un planeta hacia el Este y a una distancia menor a 4
+    Precondicion:
+        ninguna
+    Tipo:
+        Booleano
+    */
+    return(hayUnPlanetaA_Hacia_(1, Este) || return(hayUnPlanetaA_Hacia_(2, Este) || return(hayUnPlanetaA_Hacia_(3, Este))
+}
+function hayPlanetaAlOeste(){
+    /*
+    Proposito:
+        Indica si hay un planeta hacia el Oeste y a una distancia menor a 4
+    Precondicion:
+        ninguna
+    Tipo:
+        Booleano
+    */
+    return(hayUnPlanetaA_Hacia_(1, Oeste) || return(hayUnPlanetaA_Hacia_(2, Oeste) || return(hayUnPlanetaA_Hacia_(3, Oeste))
+}
+   
+
+

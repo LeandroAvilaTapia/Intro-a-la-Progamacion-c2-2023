@@ -1,0 +1,33 @@
+program{
+    if(hayMasDe5DeColor_(Verde)){
+        Poner(Negro)
+    }
+    
+}
+//------------------Ejercicio1----------------------
+/*
+a.A)V -B)V  -C)F
+b.A)F -B)F  -C)V 
+c.A)F -B)V  -C)V
+d.A)F -B)V  -C)F
+e.A)F -B)V  -C)F
+f.A)F -B)V  -C)V
+g.A)F -B)V  -C)V
+
+*/
+
+//------------------Ejercicio2----------------------
+function hayMasDe5DeColor_(color){
+    /*
+    Proposito:
+        Describe si en la celda actual hay mas de 5 bolitas
+        de color *color
+    Precondicion
+        ninguna
+    Parametro:
+        **color:Color
+    Tipo
+        Booleano
+    */
+    return (nroBolitas(color)>5)
+}
