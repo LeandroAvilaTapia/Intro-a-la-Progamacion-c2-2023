@@ -1,0 +1,177 @@
+program{
+    VaciarFilaDe_HaciaEl_(Negro, Sur)
+}
+
+procedure IrAlBorde_(direccion){
+    /*
+    Proposito:
+        Mueve el cabezal al borde *direccion*
+    Precondicion:
+        Ninguna
+    Parametro:
+        *direccion*:Direccion
+    */
+    while(puedeMover(direccion)){
+        Mover(direccion)
+    }
+    
+}
+
+
+procedure SacarTodasLasDeColor_(colorASacar){
+    /*
+    Proposito:
+        Saca todas las bolitas de color *colorASacar* de la celda actual
+    Precondicion:
+        Ninguna
+    Parametro:
+        *colorASacar*:Color
+    */
+    while(hayBolitas(colorASacar)){
+        Sacar(colorASacar)
+    }
+}
+procedure VaciarFilaDe_(color){
+    /*
+    Proposito:
+        Saca todas las bolitas de color *color* de la fila actual.El 
+        cabezal finaliza en el borde Este
+    Precondicion:
+        Ninguna
+    Parametro:
+        *color*:Color
+    */
+    IrAlBorde_(Oeste)
+    while(puedeMover(Este)){
+        SacarTodasLasDeColor_(color)
+        Mover(Este)
+    }
+    SacarTodasLasDeColor_(color)
+}    
+    
+procedure VaciarTableroDe_(color){
+    /*
+    Proposito:
+        Saca todas las bolitas de color *color* de la tablero actual.El 
+        cabezal finaliza en el borde Noreste
+    Precondicion:
+        Ninguna
+    Parametro:
+        *color*:Color
+        
+    */
+    IrAlBorde_(Sur)
+    while(puedeMover(Norte)){
+        VaciarFilaDe_(color)
+        Mover(Norte)
+    }
+    VaciarFilaDe_(color)
+}
+
+procedure VaciarTableroBDe_(color){
+    /*
+    Proposito:
+        Saca todas las bolitas de color *color* de la tablero actual.El 
+        cabezal finaliza en el borde Noreste
+    Precondicion:
+        Ninguna
+    Parametro:
+        *color*:Color
+        
+    */
+    IrAlBorde_(Sur)
+    IrAlBorde_(Oeste)
+    while (puedeMover(Norte)){
+        while(puedeMover(Este)){
+            SacarTodasLasDeColor_(color)
+            Mover(Este)
+        }
+        SacarTodasLasDeColor_(color)
+        Mover(Norte)
+        IrAlBorde_(Oeste)
+    }
+    while(puedeMover(Este)){
+        SacarTodasLasDeColor_(color)
+        Mover(Este)
+        }
+    SacarTodasLasDeColor_(color)
+    
+}
+
+procedure VaciarFilaDe_HaciaEl_(color, direccion){
+    /*
+    Proposito:
+        Saca todas las bolitas de color *color* de la fila actual.El 
+        cabezal finaliza en el borde Este
+    Precondicion:
+        Las direccion solo pueden ser Este u Oeste
+    Parametro:
+        *color*:Color
+        *direccion*:Direccion
+    */
+    IrAlBorde_(opuesto(direccion))
+    while(puedeMover(direccion)){
+        SacarTodasLasDeColor_(color)
+        Mover(direccion)
+    }
+    SacarTodasLasDeColor_(color)
+} 
+    
+procedure IrAPrimeraCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Mueve el cabezal a la primera celda en un reccorido con direccion
+        *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    IrAlBorde(opuesto(dirPrincipal))
+    IrAlBorde(opuesto(dirSecundaria))
+}    
+function haySiguienteCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Indica si hay una celda en la direccion *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    return (puedeMover(dirPrincipal)||puedeMover(dirSecundaria))
+}    
+procedure IrASiguienteCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Mueve el cabezal a la suiguiente celda en un reccorido con direccion
+        *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+        Tiene que haber al menos una celda en la direccion *dirSecundaria*
+        otra variante: Tiene que haber al menos una celda en un recorrido
+        con direccion *dirPrincipal* y *dirSecundaria*
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    if(puedeMover(dirPrincipal)){
+        Mover(dirPrincipal)
+    }else{
+        Mover(dirSecundaria)
+        IrAlBorde(opuesto(dirPrincipal))
+    }
+}  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
