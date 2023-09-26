@@ -1,0 +1,259 @@
+program{
+    return (coordenadaY()) 
+}   
+
+    
+procedure IrAPrimeraCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Mueve el cabezal a la primera celda en un reccorido con direccion
+        *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    IrAlBorde(opuesto(dirPrincipal))
+    IrAlBorde(opuesto(dirSecundaria))
+}    
+function haySiguienteCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Indica si hay una celda en la direccion *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    return (puedeMover(dirPrincipal)||puedeMover(dirSecundaria))
+}    
+procedure IrASiguienteCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Mueve el cabezal a la suiguiente celda en un reccorido con direccion
+        *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+        Tiene que haber al menos una celda en la direccion *dirSecundaria*
+        otra variante: Tiene que haber al menos una celda en un recorrido
+        con direccion *dirPrincipal* y *dirSecundaria*
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    if(puedeMover(dirPrincipal)){
+        Mover(dirPrincipal)
+    }else{
+        Mover(dirSecundaria)
+        IrAlBorde(opuesto(dirPrincipal))
+    }
+}
+
+//-------------------Ejercicio 1----------------------------
+function hayBolitas_EnElBorde_(color, direccion){
+    /*
+    Proposito
+        Indica si hay bolitas de color *color* en la celda que esta al borde
+        *direccion*
+    Precondicion
+        ninguno
+    Tipo
+        Booleano 
+    Parametro
+        *color*:Color
+        *direccion*:Direccion
+    */
+    IrAlBorde(direccion)
+    return(hayBolitas(color))
+}
+//-------------------Ejercicio 2----------------------------
+function tieneBolitas_Al_(color, direccion){ 
+    /*
+    Proposito
+        Indica si hay al menos una bolita de color *color* en
+        la celda lindante al *direccion*
+    Precondicion
+        Tiene que haber al menos una celda lindante al *direccion*
+    Tipo
+        Booleano
+    Parametro
+        *color*:Color
+        *direccion*:Direccion
+    */
+    Mover(direccion)
+    return(hayBolitas(color))
+}
+//-------------------Ejercicio 3----------------------------
+function hayBolitas_Al_(color, direccion){
+    /*
+    Proposito
+        Indica si hay una celda lindante al *direccion* y 
+        si hay al menos una bolita de color *color* en dicha celda
+    Precondicion
+        ninguno
+    Tipo
+        Booleano
+    Parametro
+        *color*:Color
+        *direccion*:Direccion
+    */
+    return(puedeMover(direccion) && tieneBolitas_Al_(color, direccion))
+}
+
+//-------------------Ejercicio 4----------------------------
+function máximoEntre_Y_(valor1, valor2){
+    /*
+    Proposito
+        Describe el valor mas grande entre los valores dados
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    Parametro
+        *valor1* y *valor2*:Numero
+    */
+    return(
+        choose valor1 when (valor1 > valor2)
+                valor2 otherwise
+        )
+}
+function mínimoEntre_Y_(valor1, valor2){
+    /*
+    Proposito
+        Describe el valor mas chico entre los valores dados
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    Parametro
+        *valor1* y *valor2*:Numero
+    */
+    return(
+        choose valor2 when (valor1 > valor2)
+                valor1 otherwise
+        )
+}
+//-------------------Ejercicio 5----------------------------
+function nroBolitas_EnLaFilaActual(color){
+    /*
+    Proposito
+        Describe la cantidad de bolitas de color *color* que hay en la fila
+        actual
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    Parametro
+        *color*:Color
+    */
+    cantidadDeBolitasYaVistas:=0
+    IrAlBorde(Oeste)
+    while(puedeMover(Este)){
+        cantidadDeBolitasYaVistas := cantidadDeBolitasYaVistas + nroBolitas(color)
+        Mover(Este)
+    }
+    return (cantidadDeBolitasYaVistas + nroBolitas(color))
+     
+}
+//-------------------Ejercicio 6----------------------------
+function nroFilas(){
+    /*
+    Proposito
+        Describe la cantidad de filas que hay en el tablero
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    */
+    nroFilasHastaAhora:=1
+    IrAlBorde(Sur)
+    while(puedeMover(Norte)){
+        nroFilasHastaAhora := nroFilasHastaAhora + 1
+        Mover(Norte)
+    }
+    return (nroFilasHastaAhora)
+}
+
+function nroColumnas(){
+    /*
+    Proposito
+        Describe la cantidad de columnas que hay en el tablero
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    */
+    nroColumnasHastaAhora:=1
+    IrAlBorde(Oeste)
+    while(puedeMover(Este)){
+        nroColumnasHastaAhora := nroColumnasHastaAhora + 1
+        Mover(Este)
+    }
+    return (nroColumnasHastaAhora)
+}
+//-------------------Ejercicio 7----------------------------
+function distanciaAlBorde_(direccion){
+    /*
+    Proposito
+        Describe la cantidad de celdas que hay entre la celda actual
+        y el borde *direccion*
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    Parametro
+        *direccion*:Direccion
+    */
+    distanciaAlBordeHastaAhora:=0
+     while(puedeMover(direccion)){
+         distanciaAlBordeHastaAhora := distanciaAlBordeHastaAhora + 1
+         Mover(direccion)
+     }
+     return (distanciaAlBordeHastaAhora)
+}
+//-------------------Ejercicio 8----------------------------
+function coordenadaX(){
+    /*
+    Proposito
+        Describe la coordenada X en la que se encuentra la celda actual
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    */
+     return (distanciaAlBorde_(Oeste))
+}
+
+function coordenadaY(){
+    /*
+    Proposito
+        Describe la coordenada Y en la que se encuentra la celda actual
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    */
+     return (distanciaAlBorde_(Sur))
+}
+//-------------------Ejercicio 9----------------------------
+function coordenadaX(){
+    /*
+    Proposito
+        Describe la coordenada X en la que se encuentra la celda actual
+    Precondicion
+        ninguno
+    Tipo
+        Numero
+    */
+     return (distanciaAlBorde_(Oeste))
+}
+
+
+
+
+
+
+
+//
