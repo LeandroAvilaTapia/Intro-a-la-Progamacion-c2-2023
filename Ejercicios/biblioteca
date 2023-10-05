@@ -1,0 +1,129 @@
+program{
+    //DibujarBanda_EnDiagonalNEDe_x_(Rojo,2,4)
+    //Mover_SegúnColor_(Este,Rojo)
+    PasarPalabraActualAMayúsculas()
+}
+
+procedure DibujarBanda_EnDiagonalNEDe_x_(color, alto, largo){
+    /*
+    Proposito
+        Dibuja una banda de color *color* en la diagonal noroeste de un largo total de *largo* celdas
+        y *alto* celdas de alto
+    Precondicion
+        Tiene que haber al menos *largo*-1 celdas al Este incluyendo la celda actual
+        y *alto* celdas al Norte. Estas celdas tiene que estar vacias.
+    Parametro
+        **color:Color
+        **alto:Numero
+        *largo:Numero
+    */
+    repeat(largo-1){
+        PonerColumna_DeAlto_(color,alto)
+        Mover(Este)
+    }
+    PonerColumna_DeAlto_(color,alto)
+}
+procedure PonerColumna_DeAlto_(colorAPoner,altoColumna){
+    /*
+    Proposito
+        Pone una columna de color *color de *altoColumna celdas de alto
+    Precondicion
+        Tiene que haber al menos *altoColumna-1 celdas al Norte
+    Parametro
+        **color:Color
+        **altoColumna:Numero
+    */
+    repeat(altoColumna-1){
+        Poner(colorAPoner)
+        Mover(Norte)
+    }
+    Poner(colorAPoner)
+    repeat(altoColumna-2){
+        Mover(Sur)
+    }
+}
+//-----------------------Ejercicio 2------------------------------
+procedure Mover_SegúnColor_(dirección,color){
+    /*
+    Proposito
+        Mueve el cabezal hacia la direccion *direccion la cantidad de bolitas de color *color
+    Precondicion
+        Tiene que haber al menos la cantidad de celdas al *direccion equivalente a la 
+        cantidad de bolitas de color *color
+    Parametro
+        **color:Color
+        **dirección:Direccion
+    */
+    repeat(nroBolitas(color)){
+        Mover(dirección)
+    }
+    
+}
+//-----------------------Ejercicio 3------------------------------
+/*
+a.(A)Tipo:Numero Valor:3-(B)Tipo:Numero Valor:8-(C)Tipo:Numero Valor:0
+b.(A)Tipo:Direccion Valor:Este
+c.(A)Tipo:Numero Valor:0-(B)Tipo:Numero Valor:4-(C)Tipo:Numero Valor:0
+d.(A)Tipo:Numero Valor:6-(B)Tipo:Numero Valor:8-(C)Tipo:Numero Valor:0
+*/
+//-----------------------Ejercicio 5------------------------------
+procedure PasarPalabraActualAMayúsculas(){
+    /*
+    Proposito
+        Convierte una palabra que esta en minuscula a una palabra en mayuscula. El largo
+        de la palabra esta indicado en la cantidad de bolitas rojas que hay en la celda actual
+        El cabezal quedarà en la ultima letra de la palabra en minuscula
+    Precondicion:
+        El cabezal tiene que estar posicionado en la celda que
+        indica la cantidad de letras de la palabra
+        Tiene que haber al menos una celda lindante al norte de cada letra
+        de la palabra y que estas celdas esten vacias
+        Tiene que haber al menos celdas al este como bolitas rojas existen en la celda actual
+        Debeexistir una palabra 
+        Debe existir una fila al norte
+    Observaciones
+         El largo de la palabra esta indicado en la cantidad de bolitas rojas que hay en la celda actual
+        El cabezal quedarà en la ultima letra de la palabra en minuscula
+    */
+    repeat(nroBolitas(Rojo)){
+    Mover(Este)
+    Convertir_AMayuscula(nroBolitas(Negro))
+    }
+}
+
+procedure Convertir_AMayuscula(cantidadBolitas){
+    /*
+    Proposito
+        Convierte la letra minuscula a una letra mayuscula. La letra minuscula esta representado
+        por *cantidadBolitas bolitas negras
+    Precondicion
+        Tiene que haber al menos una celda lindante al norte de la celda actual y que este vacia
+    Parametro:
+        *cantidadBolitas:Numero:indica la cantidad de bolitas que representa
+        la letra en minuscula
+    */ 
+    Mover(Norte)
+    repeat(cantidadBolitas-32){
+        Poner(Negro)
+    }
+    Mover(Sur)
+}
+
+//-----------------------Ejercicio 5------------------------------
+procedure SacarTodasLasDeColor_(colorASacar){
+    /*
+    Proposito
+        Saca todas la bolitas de color *colorASacar que hay en la celda actual
+    Precondicion:
+        Tiene que tener al menos una bolita de color *colorASacar
+    */
+    repeat(nroBolitas(Rojo)){
+    Mover(Este)
+    Convertir_AMayuscula(nroBolitas(Negro))
+    }
+}
+
+
+
+
+

@@ -164,9 +164,91 @@ procedure IrASiguienteCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
         IrAlBorde(opuesto(dirPrincipal))
     }
 }  
+
+//--------------Ejercicio 9----------------
+function esDepósitoCentral(){
+    /*
+    Tres bolitas negras marcan el depósito central,
+● dos bolitas negras marcan un depósito local,
+● una bolita negra marca el camino de central a local,
+● cada bolita azul marca una unidad de mercadería.
+
+    Proposito:
+        Indica si la celda actual esta en un deposito central
+    Precondicion:
+        ninguna
+    Tipo
+        Booleano
+    Observaciones
+        el deposito central esta representado por 3 bolitas negras
+    */
+    return(nroBolitas(Negro) == 3)
+}
+
+function esDepósitoLocal(){
+    /*
+    Tres bolitas negras marcan el depósito central,
+● dos bolitas negras marcan un depósito local,
+● una bolita negra marca el camino de central a local,
+● cada bolita azul marca una unidad de mercadería.
+
+    Proposito:
+        Indica si la celda actual esta en un deposito local
+    Precondicion:
+        ninguna
+    Tipo
+        Booleano
+    Observaciones
+        el deposito central esta representado por 2 bolitas negras
+    */
+    return(nroBolitas(Negro) == 2)
+}
+
+procedure IrDeCentralAlLocal_(direccion){
+    /*
+    que mueve el cabezal del depósito
+central al depósito local que está en la dirección dada, suponiendo que el
+cabezal comience en el depósito centra
+
+    Proposito:
+        Mueve el cabezal del depósito central al depósito local que está en la dirección dada
+    Precondicion:
+        el cabezal tiene que iniciar en el deposito central y tiene que haber un deposito local en la direccion dada
+    Parametro
+        direccion:Direccion
+        
+    */
+    while(not esDepósitoLocal()/* && puedeMover(direccion)*/){
+        Mover(direccion)
+    }
+}
     
-    
-    
+procedure IrDelLocal_ACentral(direccion){
+    /*
+    Proposito:
+        Mueve el cabezal del depósito local que está en la dirección dada al depósito central 
+    Precondicion:
+        el cabezal tiene que estar en el deposito local y tiene que haber un deposito central hacia la direccion opuesta a la dada
+    Parametro
+        direccion:Direccion
+        
+    */
+    while(not esDepósitoCentral()/* && puedeMover(direccion)*/){
+        Mover( opuesto(direccion) )
+    }
+}
+
+procedure Llevar_MercaderíasAlLocal_(cantidad, direccion){
+    /*
+    Proposito:
+        LLeva *cantidad* de unidades de mercaderia hacia el deposito local en la direccion *direccion*
+    Precondicion:
+        el cabezal tiene que estar en el deposito local y tiene que haber un deposito central hacia la direccion opuesta a la dada
+    Parametro
+        direccion:Direccion
+        
+    */
+}        
     
     
     

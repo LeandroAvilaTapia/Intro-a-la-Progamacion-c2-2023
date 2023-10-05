@@ -1,5 +1,5 @@
 program{
-    return (coordenadaY()) 
+    IrANésimaVacía_(16)
 }   
 
     
@@ -237,23 +237,190 @@ function coordenadaY(){
     */
      return (distanciaAlBorde_(Sur))
 }
-//-------------------Ejercicio 9----------------------------
-function coordenadaX(){
+
+//-------------------Ejercicio 10----------------------------
+function nroVacías(){
     /*
     Proposito
-        Describe la coordenada X en la que se encuentra la celda actual
+        Describe la cantidad de celdas vacias que hay en el tablero
     Precondicion
         ninguno
+    Observacion:
+        Es un recorrido de acumulacion sobre las celdas del tablero, que 
+        acumula la cantidad de celdas vacias que hay en el tablero
+    */
+    celdasVaciasHastaAhora := 0
+    IrAPrimeraCeldaEnUnRecorridoAl_Y_(Norte,Este)
+    while(haySiguienteCeldaEnUnRecorridoAl_Y_(Norte,Este)){
+        celdasVaciasHastaAhora:= unoSi_CeroSino(not (hayBolitas(Rojo) || hayBolitas(Verde) || hayBolitas(Negro) || hayBolitas(Azul))) + celdasVaciasHastaAhora
+        IrASiguienteCeldaEnUnRecorridoAl_Y_(Norte,Este)
+    }
+    return (unoSiCeldaVaciaCeroSinoEs() + celdasVaciasHastaAhora)
+}
+function unoSiCeldaVaciaCeroSinoEs(){
+    /*
+    Proposito: 
+        Describe un uno si la celda actual es un una celda vacia o un cero
+        si no lo es
+    Precondicion
+        ninguna
     Tipo
         Numero
     */
-     return (distanciaAlBorde_(Oeste))
+    contador:=0
+    if(not (hayBolitas(Rojo) || hayBolitas(Verde) || hayBolitas(Negro) || hayBolitas(Azul)) ){
+        contador:= 1
+    }
+    return (contador)
+}
+
+function unoSi_CeroSino(condicion){
+    /*
+    Proposito
+        Describe 1 si se cumple la condicion dada sino describe un 0
+    Precodicion
+        ninguna
+    Parametro
+        *condicion*:Booleano
+    Tipo
+        Numero
+    */
+    return (choose 1 when (condicion)
+                    0 otherwise)
+}
+
+//-------------------Ejercicio 11----------------------------
+function colorMínimoConBolitas(){
+    /*
+    Proposito
+        Describe el color mas chico que hay en la celda actual
+    Precondicion
+        Tiene que haber una bolita de cualquier color
+    Tipo
+        Numero
+    Observaciones
+        el orden Azul, Negro, Rojo, Verde
+    */
+    
+    colorActual := minColor()
+    while(not hayBolitas(colorActual)){
+        colorActual := siguiente(colorActual)
+    }
+     return (colorActual)
+     
+     
+}
+function esCeldaVacía(){
+    /*
+    Proposito:
+        Indica si la celda actual esta vacia
+    Precondicion
+        ninguna
+    Tipo
+        Booleano 
+    */
+    return (not (hayBolitas(Verde)||hayBolitas(Rojo)||hayBolitas(Verde)||hayBolitas(Negro) ))
+    //return (not hayBolitas(Verde)||not hayBolitas(Rojo)||not hayBolitas(Verde)||not hayBolitas(Negro))
+}
+
+//-------------------Ejercicio 15----------------------------
+procedure IrANésimaVacía_(nnn){
+    /*
+    Proposito
+        Mueve el cabezal a la celda vacia numero *n*, si no hay suficientes celdas vacias
+        deja el cabezal en el borde Noreste
+    Precondicion
+        ninguna
+    Observaciones
+        es es un reccorido de busqueda sobre las celdas del tablero, que busca la celda
+        vacia numero *n*
+    */
+    
+    celdasVacíasYaVistas := 0
+    IrAPrimeraCeldaEnUnRecorridoAl_Y_(Este,Norte)
+    
+    celdasVacíasYaVistas := celdasVacíasYaVistas + unoSi_CeroSino(esCeldaVacía())
+    
+    while(haySiguienteCeldaEnUnRecorridoAl_Y_(Este,Norte) && celdasVacíasYaVistas /= nnn){
+    IrASiguienteCeldaEnUnRecorridoAl_Y_(Este,Norte)
+    celdasVacíasYaVistas := celdasVacíasYaVistas + unoSi_CeroSino(esCeldaVacía())
+    }
+     
+     
 }
 
 
+function cantidadDeCanalesLibres(){
+    /*
+    Proposito
+        Describe la cantidad de canales libres
+    Precondicion
+        ninguna
+    Tipo
+        Numero
+    */
+    IrAlPrimerCanalAl_(Oeste) //IrAlBorde(Oeste)
+    cantidadDeCanalesLibresHastaAhora := cantidadDeCanalesLibresHastaAhora + unoSi_CeroSino(hayAvionEnElCanalActual())
+    while(hayCanalAl_(Este)){//puedeMover(Este)
+        IrAlSiguienteCanalAl_(Este)//Mover(Este)
+        cantidadDeCanalesLibresHastaAhora := cantidadDeCanalesLibresHastaAhora + unoSi_CeroSino(hayAvionEnElCanalActual())
+    }
+    return( cantidadDeCanalesLibresHastaAhora )
+}
 
+function hayAvionEnElCanalActual(){
+    /*
+    Proposito
+        Indica si hay un avion en el canal actual
+    Precondicion
+        ninguna
+    Tipo
+        Booleano
+    */
+    IrAlPrimerSectorAl_(Sur)//IrAlBorde(Sur)
+    while( HaySiguienteSectorAl_(Norte) && not hayAvionEnElSectorActual() ){
+        IrAlSiguienteSectorAl_(Norte)//Mover(Norte)
+    }
+    
+    return ( hayAvionEnElSectorActual() )
+}
 
-
+function cantidadDeAvionesDespegando(){
+    /*
+    Proposito
+        Describe la cantidad de aviones que estan despegando en todo el aeropuerto
+    Precondicion
+        ninguna
+    Tipo
+        Numero
+    */
+    IrAlPrimerCanalAl_(Oeste) //IrAlBorde(Oeste)
+    cantidadDeAvionesDespegandoHastaAhora := cantidadDeAvionesDespegandoHastaAhora + cantidadDeAvionesDespegandoEnElCanalActual()
+    while(hayCanalAl_(Este)){//puedeMover(Este)
+        IrAlSiguienteCanalAl_(Este)//Mover(Este)
+        cantidadDeAvionesDespegandoHastaAhora := cantidadDeAvionesDespegandoHastaAhora + cantidadDeAvionesDespegandoEnElCanalActual()
+    }
+    return( cantidadDeCanalesLibresHastaAhora )
+}
+function cantidadDeAvionesDespegandoEnElCanalActual(){
+    /*
+    Proposito
+        Describe la cantidad de aviones que estan por despegar en el canal actual
+    Precondicion
+        ninguna
+    Tipo
+        Numero
+    */
+    IrAlPrimerSectorAl_(Sur)//IrAlBorde(Sur)
+    cantidadDeAvionesPorDespegar := unoSi_CeroSino( hayAvionPorDespegarEnElSectorActual() ) // nroBolitas(Azul)>0 && nroBolitas(Rojo) == 1
+    while( HaySiguienteSectorAl_(Norte) && not hayAvionPorDespegarEnElSectorActual() ){
+        IrAlSiguienteSectorAl_(Norte)//Mover(Norte)
+        
+        cantidadDeAvionesPorDespegar := cantidadDeAvionesPorDespegar + unoSi_CeroSino( hayAvionPorDespegarEnElSectorActual() )
+    }
+    
+    return ( cantidadDeAvionesPorDespegar() )
+}
 
 
 //
