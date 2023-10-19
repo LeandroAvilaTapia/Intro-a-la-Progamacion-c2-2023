@@ -1,0 +1,155 @@
+ //ejercicio 1 parcial 1
+ procedure EliminarAccesoriosDe_(codigoDePersonaje){
+     /*
+     Proposito:
+        Elimina todos los accesorios del personajes del codigo dado
+    Precondicion
+        Debe existir el personaje que se quiere eliminar los accesorios
+    Parametro
+        *codigoDePersonaje*: Numero: indica el codigo de personaje a eliminar los accesorios
+     */
+     IrAlPersonaje_(codigoDePersonaje)
+     EliminarAccesoriosDePersonajeAca()
+ }
+ 
+ procedure IrAlPersonaje_(codigoDePersonaje){
+     /*
+     Proposito:
+        Mueve el cabezal sobre el personaje con el codigo dado
+    Precondicion
+        Debe existir el personaje que se quiere eliminar los accesorios
+    Parametro
+        *codigoDePersonaje*: Numero: indica el codigo de personaje a eliminar los accesorios
+    Observaciones
+        es un recorrido de busqueda sobre los persoanjes del tablero, que busca
+        el personaje con el codigo dado
+     */
+     IrAPrimerPersonajeRecorriendoHacia_Y_(Este,Norte)
+     while (personajeAqui() /= codigoDePersonaje ){
+         IrASiguientePersonajeRecorriendoHacia_Y_(Este,Norte)
+     }
+ }
+procedure EliminarAccesoriosDePersonajeAca(){
+     /*
+     Proposito:
+        Elimina los accesorios del personaje actual
+    Precondicion
+        El cabezal tiene que estar sobre un personaje
+    Observaciones
+        es un recorrido de procesamiento sobre direcciones    
+     */
+     direccionActual := minDir()
+     while(direccionActual/= maxDir()){
+         EliminarAccesorioAl_SiHay(direccionActual)//aca se procesa el elemento
+         direccionActual := siguiente(direccionActual)
+     }
+} 
+procedure EliminarAccesorioAl_SiHay(direccion){
+     /*
+     Proposito:
+        Elimina el accesorio de la celda lindante hacia la direccion dada si 
+        existe la celda y si hay accesorio ahi
+    Precondicion
+        Ninguna
+    Parametro
+        direccion:Direccion
+     */
+     if(siHayAccesorioAl_(direccion)){
+         EliminarAccesrioAl_(direccion)
+     }
+}      
+
+
+//-------------------Ejercicio 2------------
+function elPersonajeConMasAccesorios(){
+    /*
+     Proposito:
+        Describe al codigo del personaje con mas accesorios
+    Precondicion
+        Debe existir al menos un personaje con mas accesorios en el tablero.
+    Tipo:
+        Numero
+    Observaciones:
+    recorrido de maximo/minimo sobre los personajes del tablero,
+     */
+    IrAPrimerPersonajeRecorriendoHacia_Y_(Este,Norte)
+    personajeConMasAccesorios := personajeAqui()
+    while(haySiguientePersonajeRecorriendoHacia_Y_(Este,Norte)){
+        IrASiguientePersonajeRecorriendoHacia_Y_(Este,Norte)
+        personajeConMasAccesorios := personajeConMasAccesoriosEntre_Y_(personajeConMasAccesorios,personajeAqui())
+    }
+    return (personajeConMasAccesorios)
+}
+
+function personajeConMasAccesoriosEntre_Y_(unPersonaje,otroPersonaje){
+    /*
+     Proposito:
+        Describe al codigo del personaje con mas accesorios entre los personajes dados, si tiene
+        la misma cantidad de accesorios describe a *unPersonaje*
+    Precondicion
+        Los personajes dados tienen que estar en el tablero
+    Parametro
+        unPersonaje: Numero: codigo del primer personaje
+        otroPersonaje: Numero: codigo del segundo personaje
+    Tipo:
+        Numero
+     */
+     return(choose unPersonaje  when (cantidadDeAccesoriosDe_(unPersonaje) < (cantidadDeAccesoriosDe_(otroPersonaje))
+                    otroPersonaje otherwise
+         )
+     
+}
+
+function cantidadDeAccesoriosDe_(codigoDePersonaje){
+    /*
+     Proposito:
+        Describe la cantidad de accesorios del personaje dado
+    Precondicion
+        El personaje dado tiene que estar en el tablero
+    Parametro
+        unPersonaje: Numero: codigo del personaje
+    Tipo:
+        Numero
+     */
+     IrAlPersonaje_(codigoDePersonaje)
+     return (cantidadDeAccesoriosDePersonajeAca())
+}
+
+function cantidadDeAccesoriosDePersonajeAca(){
+    /*
+     Proposito:
+        Describe la cantidad de accesorios del personaje de la celda actual
+    Precondicion
+        El cabezal tiene que estar sobre un personaje
+    Tipo:
+        Numero
+     Observaciones:
+        Recorrido de acumulacion sobre direcciones
+     */
+     direccionActual := minDir()
+     cantidadDeAccesorios := unoSi_CeroSiNo(hayAccesorioAl_(direccionActual))
+     while(direccionActual /= maxDir()){
+         direccionActual := siguiente(direccionActual)
+         cantidadDeAccesorios := cantidadDeAccesorios + unoSi_CeroSiNo(hayAccesorioAl_(direccionActual))
+     }
+     return (cantidadDeAccesorios)
+    
+}
+
+
+
+
+
+
+
+
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     //
