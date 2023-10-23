@@ -1,0 +1,316 @@
+program{
+    /*
+    field númeroDeCuenta // Tipo: Numero
+    field tipoDeCuenta // Tipo:TipoDeCuenta
+    field nombreCliente // Tipo: String
+    field tipoDeMoneda // Tipo: Moneda
+    field saldo         //Tipo:Numero
+    */
+    celdaParaPrueba := celdaActual()
+    cuentaParaPrueba := Cuenta(númeroDeCuenta <- 234, tipoDeCuenta <- CuentaSueldo, nombreCliente <- "Leandro", tipoDeMoneda <- Dólares, saldo <- 26000)
+    cuentaParaPrueba2 := Cuenta(númeroDeCuenta <- 211, tipoDeCuenta <- CuentaSueldo, nombreCliente <- "Leandro", tipoDeMoneda <- Euros, saldo <- 26000)
+    coordenadaPrueba := Coordenada(x <- 0, y <- 0)
+    return(esCoordenadaOrigen_(coordenadaPrueba))
+}
+
+type DíaDeLaSemana is variant {
+    /*
+    Proposito:
+        Modela los dias de la semana
+    Invariente de Representacion:
+        ninguna
+    */
+    case Lunes{}
+    case Martes{}
+    case Miercoles{}
+    case Jueves{}
+    case Viernes{}
+    case Sabado{}
+    case Domingo{}
+}
+
+function díaSiguienteA_(dia){
+    /*
+    Proposito:
+        Describe el dia siguiente al dia dado
+    Precondicion:
+        ninguna
+    Parametro:
+        dia:DiaDeLaSemana
+    Tipo:DiaDeLaSemana
+    */
+    return(choose   Martes when (dia==Lunes)
+                    Miercoles when (dia==Martes)
+                    Jueves when (dia==Miercoles)
+                    Viernes when (dia==Jueves)
+                    Sabado when (dia==Viernes)
+                    Domingo when (dia==Sabado)
+                    Lunes otherwise
+    )
+}
+
+-------------------------Ejercicio 3------------------------------
+type Celda is record {
+/* PROPÓSITO: modelar una celda del tablero
+INV.REP.: los números son todos >=0
+*/
+field cantidadDeAzules // un número
+field cantidadDeNegras // un número
+field cantidadDeRojas // un número
+field cantidadDeVerdes // un número
+}
+-------------------------A-----------------------------------------
+function celdaActual(){
+    /*
+    Proposito:
+        Describe la celda actual
+    Precondicion:
+        ninguna
+    Tipo:Celda
+    */
+    return(Celda(
+                cantidadDeAzules <- nroBolitas(Azul),
+                cantidadDeNegras <- nroBolitas(Negro),
+                cantidadDeRojas <- nroBolitas(Rojo),
+                cantidadDeVerdes <- nroBolitas(Verde)
+                )
+        )
+}
+------------------------- B -----------------------------------------
+function cantidadDeAzulesEn_(celda){
+    /*
+    Proposito:
+        Describe la cantidad de bolitas azules de la celda dada
+    Precondicion:
+        ninguna
+    Parametro:
+        celda:Celda
+    Tipo:Numero
+    */
+    return( cantidadDeAzules(celda) )
+}
+
+function cantidadTotalDeBolitasEn_(celda){
+    /*
+    Proposito:
+        Describe la cantidad total de bolitas de la celda dada
+    Precondicion:
+        ninguna
+    Parametro:
+        celda:Celda
+    Tipo:Numero
+    */
+    
+    return( cantidadDeAzules(celda) + cantidadDeVerdes(celda) +
+            cantidadDeRojas(celda) + cantidadDeNegras(celda) )
+}
+
+function tiene_MásBolitasQue_(primeraCelda,segundaCelda){
+    /*
+    Proposito:
+        indica si celda *primeraCelda* tiene mas bolitas que la celda
+        *segundaCelda*
+    Precondicion:
+        ninguna
+    Parametro:
+        primeraCelda y segundaCelda:Celda
+    Tipo:Booleano
+    */
+    return ( cantidadTotalDeBolitasEn_(primeraCelda) > cantidadTotalDeBolitasEn_(segundaCelda))
+}
+
+
+
+------------------------Ejercicio 4---------------------------
+type Cuenta is record{
+    /* 
+        PROPÓSITO: modelar una cuenta
+        INV.REP.: el numero de cuenta tiene que ser > 0
+    */
+    field númeroDeCuenta // Tipo: Numero
+    field tipoDeCuenta // Tipo:TipoDeCuenta
+    field nombreCliente // Tipo: String
+    field tipoDeMoneda // Tipo: Moneda
+    field saldo         //Tipo:Numero
+}
+type TipoDeCuenta is variant {
+/* PROPÓSITO: modelar los diferentes tipos de cuenta que
+ofrece el banco
+*/
+case CuentaCorriente {}
+case CajaDeAhorro {}
+case CuentaSueldo {}
+}
+type Moneda is variant {
+/* PROPÓSITO: modelar los diferentes tipos de moneda con los
+que trabaja el banco
+*/
+case Pesos {}
+case Dólares {}
+case Euros {}
+case Reales {}
+}
+
+function cuenta_ConSaldoActualizadoA_(cuenta,nuevoSaldo){
+    /*
+    Proposito:
+        describe la cuenta *cuenta* con el saldo *nuevoSaldo*
+    Precondicion:
+        ninguna
+    Parametro:
+        *cuenta*:Cuenta
+        *nuevoSaldo*:Numero
+    Tipo:Cuenta
+    */
+    
+    return(Cuenta(cuenta | saldo <- nuevoSaldo))
+}
+
+function cuenta_ConTipoDeCuentaCambiadoA_(cuenta,nuevoTipoDeCuenta){
+    /*
+    Proposito:
+        describe la cuenta *cuenta* con el tipo de cuenta *nuevoTipoDeCuenta*
+    Precondicion:
+        ninguna
+    Parametro:
+        *cuenta*:Cuenta
+        *nuevoTipoDeCuenta*:TipoDeCuenta
+    Tipo:Cuenta
+    */
+    return(Cuenta(cuenta | tipoDeCuenta <- nuevoTipoDeCuenta))
+}
+function cuenta_ConTipoCambiadoSegúnDisposición(cuenta){
+    /*
+    Proposito:
+        describe la cuenta *cuenta* con el tipo de cuenta CajaDeAhorro
+        si el tipo de cuenta es CuentaSaldo y el saldo supera los $25000, sino describe la cuenta dada
+    Precondicion:
+        ninguna
+    Parametro:
+        *cuenta*:Cuenta
+    Tipo:Cuenta
+    */
+    
+    return(choose cuenta_ConTipoDeCuentaCambiadoA_(cuenta,CajaDeAhorro) when (tipoDeCuenta(cuenta) == CuentaSueldo && saldo (cuenta) > 25000 )
+                    cuenta otherwise
+        )
+}
+
+function saldoEnPesosDe_(cuenta){
+    /*
+    Proposito:
+        describe la conversion a pesos del tipo de moneda de la cuenta *cuenta*
+    Precondicion:
+        ninguna
+    Parametro:
+        *cuenta*:Cuenta
+    Tipo:Numero
+    */
+    
+    return (
+            choose  68 * saldo(cuenta) when (tipoDeMoneda(cuenta)==Dólares)
+                    78 * saldo(cuenta) when (tipoDeMoneda(cuenta)==Euros)
+                    12 * saldo(cuenta) when (tipoDeMoneda(cuenta)==Reales)
+                    saldo(cuenta)  otherwise
+        )
+}
+
+function númeroDeCuentaConMayorSaldoEntre_Y_(primeraCuenta,segundaCuenta){
+    /*
+    Proposito:
+        describe el numero de cuenta con mayor saldo entre la cuenta *primeraCuenta* y la
+        cuenta *segundaCuenta*
+    Precondicion:
+        ninguna
+    Parametro:
+        *cuenta*:Cuenta
+    Tipo:
+        númeroDeCuenta
+    */
+    
+    return (
+            choose númeroDeCuenta(primeraCuenta) when (saldoEnPesosDe_(primeraCuenta) > saldoEnPesosDe_(segundaCuenta) )
+                    númeroDeCuenta(segundaCuenta) otherwise
+            )
+}
+
+function cuenta_ActualizadaTrasExtracciónDeCajeroDe_(cuenta,montoAExtraer){
+    /*
+    Proposito:
+        describe la cuenta *cuenta* con el saldo actualizado despues de la extraccion del monto *montoAExtraer*
+    Precondicion:
+        el monto dado tiene que ser de la misma moneda de tipoDeMoneda de la cuenta dada y que el monto *montoAExtraer*
+        no sea mayor al saldo de la cuenta
+    Parametro:
+        *cuenta*:Cuenta
+        *montoAExtraer*:Numero
+    Tipo:
+        Cuenta
+    */
+    return(
+        cuenta_ConSaldoActualizadoA_( cuenta, (saldo(cuenta)-montoAExtraer) )
+        )
+}
+
+function puedeExtraer_PorCajeroDeLaCuenta_(monto, cuenta){
+    /*
+    Proposito:
+        indica si se realiza una extraccion de *monto* en la cuenta dada, el saldo quedaria en negativo
+    Precondicion:
+        el monto dado tiene que ser de la misma moneda de tipoDeMoneda de la cuenta dada y que el monto *montoAExtraer*
+    Parametro:
+        *cuenta*:Cuenta
+        *monto*:Numero
+    Tipo:
+        Booleano
+    */
+    return (saldo(cuenta) >= monto
+    )
+}
+--------------------- Ejercicio 5 --------------------------------------
+type Coordenada is record{
+    /*
+    PROPÓSITO: modelar las coordenada del tablero
+    INV.REP.: las coordenada son todos >=0
+    */
+    field x //Tipo:Numero
+    field y //Tipo:Numero
+}
+
+function coordenada__(coordenadaX,coordenadaY){
+    /*
+    Proposito:
+        describe una coordenada x con el valor *x* y con una coordenada en y de *y*
+    Precondicion:
+        tanto x e y tienen que ser >= 0
+    Parametro:
+        *x*,*y*:Numero
+    Tipo:
+        Coordenada
+    */
+    return (Coordenada(x <- coordenadaX, y <- coordenadaY) )
+}
+
+function esCoordenadaOrigen_(coordenada){
+    /*
+    Proposito:
+        indica si la coordenada dada es la coordenada de origen(0,0)
+    Precondicion:
+        ninguna
+    Parametro:
+        coordenada: Coordenada
+    Tipo:
+        Booleano
+    */
+    return(
+        x(coordenada) == 0 && y(coordenada) == 0
+        )
+}
+
+
+
+
+
+
+
+
