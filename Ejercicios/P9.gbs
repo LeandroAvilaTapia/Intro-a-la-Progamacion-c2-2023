@@ -1,0 +1,117 @@
+program{
+    listaDePrueba := [1,0,4]
+    return ( direccionesAlBorde())
+}
+
+--------------------------Ejercicio 1-------------------------------
+function cantidadesDeRojasEnFilaActual(){
+    /*
+    Proposito:
+         describe una Lista de números cuyos elementos son las
+         cantidades de bolitas rojas en cada una de las celdas
+         de la fila actual, leídas desde el Oeste hasta el Este.
+    Precondicion
+        ninguna
+    Tipo:
+        [Numero]
+    */
+    IrAlBorde(Oeste)
+    cantidadesDeRojasEnFilaActual := [nroBolitas(Rojo)]
+    while(puedeMover(Este)){
+        Mover(Este)
+        cantidadesDeRojasEnFilaActual := cantidadesDeRojasEnFilaActual ++ [nroBolitas(Rojo)]
+    }
+    return(cantidadesDeRojasEnFilaActual)
+}
+------------2--------------------------
+function cantidadDeRojasADistancia2DelBordeOesteDe_(lista){
+    /*
+    Proposito:
+         describe una Lista de números cuyos elementos son las
+         cantidades de bolitas rojas en cada una de las celdas
+         de la fila actual, leídas desde el Oeste hasta el Este.
+    Precondicion
+        *lista* no tiene que ser una lista vacia
+    Parametro:
+        [Numero]
+    Tipo:
+        Numero
+    */
+    
+    return(
+        primero(
+            resto(resto(lista))
+            )
+        )
+}
+-----------------------------------------3------------------------
+function las3PrimerasDe_ConLaMismaCantidad(lista){
+    /*
+    Proposito:
+         indica si las 3 primeros elementos de la lista dada 
+    Precondicion
+        *lista* no tiene que ser una lista vacia
+    Parametro:
+        [Numero]
+    Tipo:
+        Numero
+    */
+    return(cantidadDeRojas_DesdeElOeste(0) == primero(lista) 
+            && cantidadDeRojas_DesdeElOeste(1) == primero(resto(lista)) 
+            && cantidadDeRojas_DesdeElOeste(2) == primero( resto(resto(lista)) )
+            )
+}
+
+function cantidadDeRojas_DesdeElOeste(coordenadaX){
+    /*
+    Proposito:
+         indica la cantidad de bolitas rojas en la coordenada dada
+    Precondicion
+        ninguna
+    Parametro:
+        coordenadaX:Numero
+    Tipo:
+        Numero
+    */
+    cantidadDeMovimiento:=coordenadaX
+    
+    while(puedeMover(Este) && cantidadDeMovimiento /= 0){
+        Mover(Este)
+        cantidadDeMovimiento := cantidadDeMovimiento - 1
+    }
+    return(nroBolitas(Rojo))
+    
+}
+
+
+---------------------------- 4 ----------------------
+function direccionesAlBorde(){
+    /*
+    Proposito:
+         Describe una lista con las direcciones en las cuales el cabezal
+         no puede moverse desde la celda actual
+    Precondicion
+        ninguna
+    Tipo:
+        [Direccion]
+    */
+    listaDeDirecciones := []
+    direccionActual:= minDir()
+    while(direccionActual /= maxDir()){
+        if(not puedeMover(direccionActual)){
+           listaDeDirecciones:= agregarALaLista_ALoUltimoLaDireccion_(listaDeDirecciones,direccionActual)
+        }
+        direccionActual := siguiente(direccionActual)
+    }
+    if(not puedeMover(direccionActual)){
+           listaDeDirecciones:= agregarALaLista_ALoUltimoLaDireccion_(listaDeDirecciones,direccionActual)
+        }
+    return(listaDeDirecciones)
+}
+
+function listaConDireccionSinMoverse(lista)
+
+function agregarALaLista_ALoUltimoLaDireccion_(lista,direccion){
+    return(lista++[direccion])
+}
+

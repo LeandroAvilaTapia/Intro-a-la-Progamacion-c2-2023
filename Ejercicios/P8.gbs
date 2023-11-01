@@ -10,7 +10,7 @@ program{
     cuentaParaPrueba := Cuenta(númeroDeCuenta <- 234, tipoDeCuenta <- CuentaSueldo, nombreCliente <- "Leandro", tipoDeMoneda <- Dólares, saldo <- 26000)
     cuentaParaPrueba2 := Cuenta(númeroDeCuenta <- 211, tipoDeCuenta <- CuentaSueldo, nombreCliente <- "Leandro", tipoDeMoneda <- Euros, saldo <- 26000)
     coordenadaPrueba := Coordenada(x <- 0, y <- 0)
-    return(esCoordenadaOrigen_(coordenadaPrueba))
+    return(númeroDeCuentaConMayorSaldoEntre_Y_(cuentaParaPrueba,cuentaParaPrueba2))
 }
 
 type DíaDeLaSemana is variant {
@@ -225,7 +225,7 @@ function númeroDeCuentaConMayorSaldoEntre_Y_(primeraCuenta,segundaCuenta){
     Parametro:
         *cuenta*:Cuenta
     Tipo:
-        númeroDeCuenta
+        Numero
     */
     
     return (

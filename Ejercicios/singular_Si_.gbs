@@ -1,0 +1,18 @@
+function singular_Si_(unElemento,condicion){
+    /*
+    Prop:
+        Describe una lista singular con *unElemento* si se cumple
+        la condicion, sino describe una lista vacia
+    Precondicion:
+        ninguna
+    Parametro
+    *unElemento*:Elemento
+    *condicion*:Booleano
+    
+    */
+    
+    return(
+            choose [unElemento] when (condicion)
+                    []          otherwise
+        )
+}
