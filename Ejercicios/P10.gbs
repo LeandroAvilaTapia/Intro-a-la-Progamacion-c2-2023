@@ -1,0 +1,249 @@
+program{
+    listaDeDirecciones:=[Norte,Norte,Norte]
+        return(
+            longitudDe_(listaDeDirecciones)
+            )
+}
+
+  
+procedure IrAPrimeraCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Mueve el cabezal a la primera celda en un reccorido con direccion
+        *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    IrAlBorde(opuesto(dirPrincipal))
+    IrAlBorde(opuesto(dirSecundaria))
+}    
+function haySiguienteCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Indica si hay una celda en la direccion *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    return (puedeMover(dirPrincipal)||puedeMover(dirSecundaria))
+}    
+procedure IrASiguienteCeldaEnUnRecorridoAl_Y_(dirPrincipal, dirSecundaria){
+    /*
+    Proposito:
+        Mueve el cabezal a la suiguiente celda en un reccorido con direccion
+        *dirPrincipal* y *dirSecundaria*
+    Precondicion:
+        Las direcciones dadas no pueden ser iguales u opuestas
+        Tiene que haber al menos una celda en la direccion *dirSecundaria*
+        otra variante: Tiene que haber al menos una celda en un recorrido
+        con direccion *dirPrincipal* y *dirSecundaria*
+    Parametro:
+        *dirPrincipal*:Direccion
+        *dirSecundaria*:Direccion
+    */
+    if(puedeMover(dirPrincipal)){
+        Mover(dirPrincipal)
+    }else{
+        Mover(dirSecundaria)
+        IrAlBorde(opuesto(dirPrincipal))
+    }
+}
+
+function singular_Si_SinoListaCero(unElemento,condicion){
+    /*
+    Prop:
+        Describe una lista singular con *unElemento* si se cumple
+        la condicion, sino describe una lista vacia
+    Precondicion:
+        ninguna
+    Parametro
+    *unElemento*:Elemento
+    *condicion*:Booleano
+    
+    */
+    
+    return(
+            choose [unElemento] when (condicion)
+                    [0]          otherwise
+        )
+}
+
+function singular_Si_(unElemento,condicion){
+    /*
+    Prop:
+        Describe una lista singular con *unElemento* si se cumple
+        la condicion, sino describe una lista vacia
+    Precondicion:
+        ninguna
+    Parametro
+    *unElemento*:Elemento
+    *condicion*:Booleano
+    
+    */
+    
+    return(
+            choose [unElemento] when (condicion)
+                    []          otherwise
+        )
+}
+------------------------------1---------------------------------------------------
+
+procedure PonerColores_EnLaCeldaActual(listaDeColores){
+    /*
+    Proposito
+        Pone en la celda actual una bolita del color correspondiente por cada uno de los
+        elementos de la misma
+    Precondicion
+        ninguna
+    Paramentro:
+        listaDeColores:[Color]
+    */
+    foreach color in listaDeColores{
+        Poner(color)
+    }
+}
+
+procedure RecorrerCamino_(listaDeDirecciones){
+    /*
+    Proposito
+        Mueve el cabezal en la dirección indicada por cada elemento de la lista dada
+    Precondicion
+        Tiene que haber al menos una celda hacia la direccion de cada elemento de la lista
+    Paramentro:
+        lista:[Direccion]
+    */
+    foreach direccion in listaDeDirecciones{
+        Mover(direccion)
+    }
+}
+
+function aparicionesDeColor_(color){
+   /*
+    Proposito
+        Describe una lista de números que indican para cada una de las celdas del tablero 
+        recorridas en dirección principal Norte y dirección secundaria Oeste, la cantidad de
+        bolitas del color dado buscado en esa celda del tablero.
+    Precondicion
+        ninguna
+    Paramentro:
+        color:Color
+    Tipo:
+       [Numero]
+    */ 
+    IrAPrimeraCeldaEnUnRecorridoAl_Y_(Norte,Oeste)
+    listaDeNumeros := [] ++ singular_Si_SinoListaCero(nroBolitas(color),hayBolitas(color))
+    while(haySiguienteCeldaEnUnRecorridoAl_Y_(Norte,Oeste)){
+        IrASiguienteCeldaEnUnRecorridoAl_Y_(Norte,Oeste)
+        listaDeNumeros := listaDeNumeros ++ singular_Si_SinoListaCero(nroBolitas(color),hayBolitas(color))
+    }
+    return(listaDeNumeros)
+}
+
+procedure Poner_Bolitas_EnElTablero(listaDeNumero,colorAPoner){
+    /*
+    Proposito
+        dada una lista de números y un color, recorre el tablero con dirección principal
+        Norte y dirección secundaria Oeste y pone en cada celda la cantidad de bolitas
+        del color dado, según el elemento en la posición correspondiente. 
+    Precondicion
+        ninguna
+    Paramentro:
+        listaDeNumero: [Numero]
+        colorAPoner:Color
+    */ 
+    IrAPrimeraCeldaEnUnRecorridoAl_Y_(Norte,Oeste)
+    Poner_DeColor_(primero(listaDeNumero), colorAPoner)
+    listaDeNumerosRestante := resto(listaDeNumero)
+    while(haySiguienteCeldaEnUnRecorridoAl_Y_(Norte,Oeste)){
+        IrASiguienteCeldaEnUnRecorridoAl_Y_(Norte,Oeste)
+        Poner_DeColor_(primero(listaDeNumerosRestante), colorAPoner)
+        listaDeNumerosRestante := resto(listaDeNumerosRestante)
+    }
+}
+procedure Poner_DeColor_(cantidad, color){
+    /*
+    Proposito
+        Pone **cantidad bolitas de color **color
+    Precondicion
+        ninguna
+    Parametro
+        **cantidad: Numero
+        **color:Color
+    */
+    repeat(cantidad){
+        Poner(color)
+    }
+}
+
+-------------------------------5-------------------------------
+function coloresEnLaCeldaActual(){
+   /*
+    Proposito
+        Describe la lista de los colores que aparecen en la celda actual
+    Precondicion
+        ninguna
+    Tipo:
+       [Direccion]
+    */ 
+    colorAVer:= minColor()
+    listaDeColores := singular_Si_(colorAVer,hayBolitas(colorAVer))
+    while(colorAVer/=maxColor()){
+        colorAVer:= siguiente(colorAVer)
+        listaDeColores := listaDeColores ++ singular_Si_(colorAVer,hayBolitas(colorAVer))
+    }
+    return(listaDeColores)
+}
+
+
+
+--------------------------6---------------------------------
+function aparicionesDelColor_EnElCamino_(colorBuscado,direccionesDelCamino){
+    /*
+    Proposito
+        Describa una lista con la cantidad de bolitas del color dado en las celdas recorridas segun
+        la lista *direccionesDelCamino*
+    Precondicion
+        Tiene que celdas para poder hacer el recorrido de la lista *direccionesDelCamino*
+    Tipo:
+       [Numero]
+    Parametro:
+        colorBuscado: Color
+        direccionesDelCamino: [Direccion]
+    */ 
+    listaDeCantidadDeBolitas := singular_Si_SinoListaCero(nroBolitas(colorBuscado),hayBolitas(colorBuscado))
+    foreach direccion in direccionesDelCamino{
+        Mover(direccion)
+        listaDeCantidadDeBolitas := listaDeCantidadDeBolitas ++ singular_Si_SinoListaCero(nroBolitas(colorBuscado),hayBolitas(colorBuscado))
+    }
+    return(listaDeCantidadDeBolitas)
+}
+
+-------------------------------------------7----------------------------
+function longitudDe_(listaACalcular){
+    /*
+    Proposito
+        Describe la cantidad de elementos que tiene la lista dada
+    Precondicion
+        ninguna
+    Tipo:
+       Numero
+    Parametro:
+        listaACalcular: [Elemento]
+    */
+    cantidadDeElemento := 0
+    foreach elemento in listaACalcular{
+        cantidadDeElemento := cantidadDeElemento + 1
+    }
+    return(cantidadDeElemento)
+}
+
+
+
+
+
+

@@ -115,3 +115,28 @@ function agregarALaLista_ALoUltimoLaDireccion_(lista,direccion){
     return(lista++[direccion])
 }
 
+--------------------------------------5--------------------------
+function es_Singular(lista){
+    /*
+    Proposito:
+         Indica si la lista dada tiene unicamente un elemento
+    Precondicion
+        ninguna
+    Tipo:
+        Booleano
+    Parametro:
+        lista:[Elemento]
+    */
+    return(
+            not esVacía(lista) && esVacía(resto(lista))
+        )
+}
+
+
+
+
+
+
+
+
+
