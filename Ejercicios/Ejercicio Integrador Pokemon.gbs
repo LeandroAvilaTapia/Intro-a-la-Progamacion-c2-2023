@@ -1,0 +1,467 @@
+program{
+    pokemon1 := pokemonDeTipo_Fuerza_YNivel_(Tierra,122,33)
+    pokemon2 := pokemonDeTipo_Fuerza_YNivel_(Agua,11,5)
+    pokemon3 := pokemonDeTipo_Fuerza_YNivel_(Tierra,12,3)
+    pokemon4 := Pókemon(pokemon3 | estáSaludable <- False , nivel <- 44)
+    listaDePokemones := [pokemon1,pokemon2,pokemon3,pokemon4]
+    return(
+        existePókemonEn_ConFuerza_Tipo_YNivel_(listaDePokemones,122,Tierra,333)
+        )
+}
+
+type TipoDePókemon is variant{
+/* PROPÓSITO: Modelar los tipos de Pókemon posibles */
+case Tierra {}
+case Agua {}
+case Fuego {}
+}
+type Pókemon is record {
+/* PROPÓSITO: Modelar un Pókemon
+INV.REP.: * La fuerza y el nivel son mayores o iguales a 0
+* Si está debilitado (estáSaludable es falso), su
+fuerza es cero */
+field tipo // TipoDePókemon
+field fuerza // Número
+field estáSaludable // Booleano.
+field nivel // Número
+}
+
+
+function pokemonDeTipo_Fuerza_YNivel_(tipoDePokemon,fuerza,nivel){
+    /*
+    Proposito:
+        Describre un pokemon de tipo *tipoDePokemon*, fuerza *fuerza*, nivel *nivel* y que está saludable
+    Precondicion:
+        La fuerza y el nivel deben ser mayores o iguales a 0
+    Parametro:
+        tipoDePokemon:TipoDePókemon
+        fuerza:Numero
+        nivel:Numero
+    Tipo:
+        Pókemon
+    */
+    return(
+        Pókemon(tipo <- tipoDePokemon, fuerza <- fuerza, nivel <- nivel, estáSaludable <- True)
+        )
+}
+
+function singular_Si_(unElemento,condicion){
+    /*
+    Prop:
+        Describe una lista singular con *unElemento* si se cumple
+        la condicion, sino describe una lista vacia
+    Precondicion:
+        ninguna
+    Parametro
+    *unElemento*:Elemento
+    *condicion*:Booleano
+    
+    */
+    
+    return(
+            choose [unElemento] when (condicion)
+                    []          otherwise
+        )
+}
+
+function longitudDe_(listaACalcular){
+    /*
+    Proposito
+        Describe la cantidad de elementos que tiene la lista dada
+    Precondicion
+        ninguna
+    Tipo:
+       Numero
+    Parametro:
+        listaACalcular: [Elemento]
+    */
+    cantidadDeElemento := 0
+    foreach elemento in listaACalcular{
+        cantidadDeElemento := cantidadDeElemento + 1
+    }
+    return(cantidadDeElemento)
+}
+
+---------------------------- 1. Ejercicios con Registros y Variantes --------------------------------------------------
+// a)
+function es_MásFuerteQue_(primerPokemon,segundoPokemon){
+    /*
+    Proposito:
+        Indica si el pokemon *primerPokemon* es mas fuerte que *segundoPokemon*
+    Precondicion:
+        ninguno
+    Parametro:
+        primerPokemon,segundoPokemon: Pókemon 
+    Tipo:
+        Booleano
+    */
+    return(
+        fuerza(primerPokemon)>fuerza(segundoPokemon)
+        )
+}
+
+// b)
+function esDeMayorNivel_Que_(primerPokemon,segundoPokemon){
+    /*
+    Proposito:
+        Indica si el pokemon *primerPokemon* tiene mas nivel que *segundoPokemon*
+    Precondicion:
+        ninguno
+    Parametro:
+        primerPokemon,segundoPokemon: Pókemon 
+    Tipo:
+        Booleano
+    */
+    return(
+        nivel(primerPokemon)>nivel(segundoPokemon)
+        )
+}
+
+// c)
+function pókemon_PotenciadoEn_(pokemon,numeroPotenciador){
+    /*
+    Proposito:
+        Describe el pokemon *pokemon* con el nivel y la fuerza multiplicado por *numeroPotenciador*
+    Precondicion:
+        el numero *numeroPotenciador* tiene que ser mayor a cero
+    Parametro:
+        pokemon: Pókemon 
+        numeroPotenciador:Numero
+    Tipo:
+        Pókemon
+    */
+    return(
+        Pókemon(pokemon | nivel <- nivel(pokemon) * numeroPotenciador, fuerza <- fuerza(pokemon) * numeroPotenciador )
+        )
+}
+// d)
+function pókemon_ConValoresDuplicados(pokemon){
+    /*
+    Proposito:
+        Describe el pokemon *pokemon* con el nivel y la fuerza duplicados
+    Precondicion:
+        ninguno
+    Parametro:
+        pokemon: Pókemon
+    Tipo:
+        Pókemon
+    */
+    return(
+        pókemon_PotenciadoEn_(pokemon,2)
+        )
+}
+// e)
+function pókemon_PotenciadoEn_SiEsDeTipo_(pokemon, factor, tipo){
+    /*
+    Proposito:
+        Describe el pokemon *pokemon* con el nivel y la fuerza multiplicado por *numeroPotenciador* si el
+        tipo dado es el mismo que el pokemon *pokemon* sino describe el mismo pokemon dado
+    Precondicion:
+        el numero *factor* tiene que ser mayor a cero
+    Parametro:
+        pokemon: Pókemon
+        factor:Numero
+        tipo:TipoDePókemon
+    Tipo:
+        Pókemon
+    */
+    return(
+        choose  pókemon_PotenciadoEn_(pokemon,factor) when    ( tipo(pokemon) == tipo )
+                pokemon otherwise
+        )
+}
+// f)
+function pókemon_Derrotado(pokemon){
+    /*
+    Proposito:
+        Describe el pokemon *pokemon* con la fuerza a 0 y el estado estáSaludable en falso
+    Precondicion:
+        ninguno
+    Parametro:
+        pokemon: Pókemon
+    Tipo:
+        Pókemon
+    */
+    return(
+            Pókemon(pokemon | fuerza <- 0, estáSaludable <- False)
+        )
+}
+-------------------------------- 2. Ejercicios con Listas de Registros ------------------------------------------
+// a)
+function pókemonDe_Entrenados_(listaDePokemones,numeroPotenciador){
+    /*
+    Proposito:
+        Describe la lista dada con los pokemones potenciador por *numeroPotenciador*
+    Precondicion:
+        numeroPotenciador
+    Parametro:
+        listaDePokemones: [Pókemon]
+        numeroPotenciador:Numero
+    Tipo:
+        [Pókemon]
+    Observaciones:
+        es un recorrido de procesamiento sobre los elementos de la lista dada,
+    */
+    listaDePokemonesEntrenados := []
+    foreach pokemon in listaDePokemones{
+        listaDePokemonesEntrenados := listaDePokemonesEntrenados ++ [ pókemon_PotenciadoEn_(pokemon,numeroPotenciador) ]
+    }
+    return(listaDePokemonesEntrenados)
+}
+// b)
+function pókemonDe_DelTipo_(listaDePokemones,tipo){
+    /*
+    Proposito:
+        Describe una lista con los pokemon del tipo *tipo* de la lista *listaDePokemones*
+    Precondicion:
+        ninguna
+    Parametro:
+        listaDePokemones: [Pókemon]
+        tipo:TipoDePókemon
+    Tipo:
+        [Pókemon]
+    Observaciones:
+        es un recorrido de busqueda sobre los elementos de la lista dada, buscando los pokemones del tipo dado
+        
+        */
+    listaDePokemonesDelTipoDado := []
+    foreach pokemon in listaDePokemones{
+        listaDePokemonesDelTipoDado := listaDePokemonesDelTipoDado ++ singular_Si_(pokemon, tipo(pokemon) == tipo )
+    }
+    return(listaDePokemonesDelTipoDado)
+}
+
+// c)
+function elMásFuerteDe_(listaDePokemones){
+    /*
+    Proposito:
+        Describe el pokemon mas fuerte de la lista dada
+    Precondicion:
+        Tiene que haber al menos un pokemon en la lista dada
+    Parametro:
+        listaDePokemones: [Pókemon]
+    Tipo:
+        Pókemon
+    Observaciones:
+        es un recorrido de busqueda sobre los elementos de la lista dada, buscando el pokemon con mayor fuerza
+        
+        */
+    pokemonMasFuerte := primero(listaDePokemones)
+    foreach pokemon in listaDePokemones{
+        pokemonMasFuerte := elPokemonMasFuerteEntre_Y_(pokemonMasFuerte,pokemon)
+    }
+    return(pokemonMasFuerte)
+}
+
+function elPokemonMasFuerteEntre_Y_(primerPokemon,segundoPokemon){
+    /*
+    Proposito:
+        Describe el pokemon mas fuerte entre los pokemones dados, si tiene la misma fuerza describe a *primerPokemon*
+    Precondicion:
+        ninguno
+    Parametro:
+        primerPokemon,segundoPokemon: Pókemon 
+    Tipo:
+        Pókemon
+    */
+    return(
+        choose primerPokemon when (fuerza(primerPokemon)>= fuerza(segundoPokemon) )
+                segundoPokemon otherwise
+        )
+}
+
+//d
+
+function pókemonDe_DelTipo_Duplicados(listaDePokemones,tipo){
+    /*
+    Proposito:
+        Describe una lista con los pokemon del tipo *tipo* de la lista *listaDePokemones* con los valores duplicados
+    Precondicion:
+        ninguna
+    Parametro:
+        listaDePokemones: [Pókemon]
+        tipo:TipoDePókemon
+    Tipo:
+        [Pókemon]
+    Observaciones:
+        
+        
+        */
+    
+    return(pókemonDe_Entrenados_(pókemonDe_DelTipo_(listaDePokemones,tipo), 2))
+}
+
+//e)
+
+function elPókemonMásDébilDe_(listaDePokemones){
+    /*
+    Proposito:
+        Describe el pokemon de nivel mas bajo de la lista dada
+    Precondicion:
+        Tiene que haber al menos un pokemon en la lista dada
+    Parametro:
+        listaDePokemones: [Pókemon]
+    Tipo:
+        Pókemon
+    Observaciones:
+        es un recorrido de busqueda sobre los elementos de la lista dada, buscando el pokemon con el nivel mas bajo
+        
+        */
+    pokemonMasDebil := primero(listaDePokemones)
+    foreach pokemon in listaDePokemones{
+        pokemonMasDebil := elPokemonMasDebilEntre_Y_(pokemonMasDebil,pokemon)
+    }
+    return(pokemonMasDebil)
+}
+
+function elPokemonMasDebilEntre_Y_(primerPokemon,segundoPokemon){
+    /*
+    Proposito:
+        Describe el pokemon con el nivel mas bajo entre los pokemones dados, si tiene el misma nivel describe a *primerPokemon*
+    Precondicion:
+        ninguno
+    Parametro:
+        primerPokemon,segundoPokemon: Pókemon 
+    Tipo:
+        Pókemon
+    */
+    return(
+        choose primerPokemon when (nivel(primerPokemon) <= nivel(segundoPokemon) )
+                segundoPokemon otherwise
+        )
+}
+
+//f)
+function pókemonDebilitadosDe_(listaDePokemones){
+    /*
+    Proposito:
+        Describe una lista con los pokemones debilitados desde la lista dada
+    Precondicion:
+        ninguna
+    Parametro:
+        listaDePokemones: [Pókemon]
+    Tipo:
+        [Pókemon]
+    Observaciones:
+        es un recorrido de procesamiento sobre los elementos de la lista dada,
+    */
+    listaDePokemonesDebilitados := []
+    foreach pokemon in listaDePokemones{
+        listaDePokemonesDebilitados := listaDePokemonesDebilitados ++ singular_Si_(pokemon, (not estáSaludable(pokemon)) )
+    }
+    return(listaDePokemonesDebilitados)
+}
+
+//g)
+function cantidadDePókemonSaludablesEn_(listaDePokemones){
+    /*
+    Proposito:
+        Describe la cantidad de pokemones que estan saludables de la lista *listaDePokemones*
+    Precondicion:
+        ninguna
+    Parametro:
+        listaDePokemones: [Pókemon]
+    Tipo:
+        Numero
+    Observaciones:
+    */
+    
+    return(
+        longitudDe_(listaDePokemones) - longitudDe_(pókemonDebilitadosDe_(listaDePokemones))
+    )
+}
+
+//h)
+function existePókemonEn_ConFuerza_Tipo_YNivel_(listaDePokemones,fuerza,tipo,nivel){
+    /*
+    Proposito:
+        indica si en la lista *listaDePokemones* hay un pokemon con la fuerza *fuerza*, tipo *tipo* y de nivel *nivel*
+    Precondicion:
+        tiene que haber al menos un pokemon en la lista dada
+    Parametro:
+        listaDePokemones: [Pókemon]
+        fuerza y nivel:Numero
+        tipo:TipoDePókemon
+    Tipo:
+        Booleano
+    Observaciones:
+    qes un recorrido de busqueda sobre los elementos de la lista dada, buscando el pokemon con los paramentro dadosd
+    */
+    
+    listaPokemonAEvaluar := listaDePokemones
+    while(not esVacía(listaPokemonAEvaluar) && not (nivel(primero(listaPokemonAEvaluar)) == nivel && 
+            fuerza(primero(listaPokemonAEvaluar)) == fuerza && tipo(primero(listaPokemonAEvaluar)) == tipo)){
+                
+                    listaPokemonAEvaluar := resto(listaPokemonAEvaluar)
+    }
+    return(not esVacía(listaPokemonAEvaluar) && nivel(primero(listaPokemonAEvaluar)) == nivel && 
+            fuerza(primero(listaPokemonAEvaluar)) == fuerza && tipo(primero(listaPokemonAEvaluar)) == tipo)
+}
+
+---------------------------------- 3. Ejercicio con Registros y Listas. ----------------------------------------------------
+type Entrenador is record{
+/* PROPÓSITO: Modelar un entrenador de Pókemon.
+INV.REP.: identificador es un número > 0 */
+field lista // [Pokemon]
+field identificador // Número
+field esTáctico // Booleano
+}
+
+// a)
+function entrenador__(identificador, esTactico){
+    /*
+    Proposito:
+        describe un entrenador con el identificador *identificador* y si es tactico segun el valor dado
+    Precondicion:
+        *identificador* tiene que ser un número > 0 
+    Parametro:
+        identificador:Numero
+        esTactico:Booleano
+    Tipo:
+        Entrenador
+    */
+    return(
+        Entrenador(lista <- [], identificador <- identificador, esTáctico <- esTactico)
+        )
+}
+
+// a)
+function entrenador__(identificador, esTactico){
+    /*
+    Proposito:
+        describe un entrenador con el identificador *identificador* y si es tactico segun el valor dado
+    Precondicion:
+        *identificador* tiene que ser un número > 0 
+    Parametro:
+        identificador:Numero
+        esTactico:Booleano
+    Tipo:
+        Entrenador
+    */
+    return(
+        Entrenador(lista <- [], identificador <- identificador, esTáctico <- esTactico)
+        )
+}
+
+// b)
+function entrenador_ConPókemon_Agregado(entrenador, pokemon){
+    /*
+    Proposito:
+        describe al entrenador dado con el pokemon *pokemon* agregado a su lista
+    Precondicion:
+        ninguno
+    Parametro:
+        entrenador:Entrenador
+        pokemon:Pókemon
+    Tipo:
+        Entrenador
+    */
+    return(
+        Entrenador(entrenador | lista <- lista(entrenador) ++ [pokemon])
+        )
+}
+
+
+
+
+
