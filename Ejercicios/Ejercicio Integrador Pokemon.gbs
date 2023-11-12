@@ -4,8 +4,13 @@ program{
     pokemon3 := pokemonDeTipo_Fuerza_YNivel_(Tierra,12,3)
     pokemon4 := Pókemon(pokemon3 | estáSaludable <- False , nivel <- 44)
     listaDePokemones := [pokemon1,pokemon2,pokemon3,pokemon4]
+    
+    entrenador1 := entrenador_ConPókemon_Agregado(entrenador__(912,True),pokemon1)
+    entrenador2 := entrenador_ConPókemon_Agregado(entrenador__(918,True),pokemon2)
+    entrenador2 := entrenador_ConPókemon_Agregado(entrenador2,pokemon3)
+    listaDeEntrenadores := [entrenador1,entrenador2]
     return(
-        existePókemonEn_ConFuerza_Tipo_YNivel_(listaDePokemones,122,Tierra,333)
+        entrenadorMásAntiguoEntre_Y_(entrenador1,entrenador2)
         )
 }
 
@@ -425,24 +430,6 @@ function entrenador__(identificador, esTactico){
         )
 }
 
-// a)
-function entrenador__(identificador, esTactico){
-    /*
-    Proposito:
-        describe un entrenador con el identificador *identificador* y si es tactico segun el valor dado
-    Precondicion:
-        *identificador* tiene que ser un número > 0 
-    Parametro:
-        identificador:Numero
-        esTactico:Booleano
-    Tipo:
-        Entrenador
-    */
-    return(
-        Entrenador(lista <- [], identificador <- identificador, esTáctico <- esTactico)
-        )
-}
-
 // b)
 function entrenador_ConPókemon_Agregado(entrenador, pokemon){
     /*
@@ -460,6 +447,88 @@ function entrenador_ConPókemon_Agregado(entrenador, pokemon){
         Entrenador(entrenador | lista <- lista(entrenador) ++ [pokemon])
         )
 }
+
+//c)
+function cantidadDePókemonDe_(entrenador){
+    /*
+    Proposito:
+        describe la cantidad de pokemones que tiene el entrenador dado
+    Precondicion:
+        ninguno
+    Parametro:
+        entrenador:Entrenador
+        
+    Tipo:
+        Numero
+    */
+    return(
+        longitudDe_( lista(entrenador) )
+        )
+}
+
+//d)
+function cantidadTotalDePókemonEn_(listaDeEntrenadores){
+    /*
+    Proposito:
+        describe la cantidad total de pokemones que tiene la lista de entrenadores dado
+    Precondicion:
+        ninguno
+    Parametro:
+        listaDeEntrenadores:[Entrenador]
+    Tipo:
+        Numero
+    */
+    cantidadDePokemonesTotales := 0
+    foreach entrenador in listaDeEntrenadores{
+        cantidadDePokemonesTotales := cantidadDePokemonesTotales + longitudDe_( lista(entrenador) )
+    }
+    return(cantidadDePokemonesTotales)
+}
+
+//e)
+function entrenadorMásAntiguoEntre_Y_(primerEntrenador,segundoEntrenador){
+    /*
+    Proposito:
+        describe al entrenador mas antiguo entre el entrenador *primerEntrenador* y el entrenador *segundoEntrenador*
+    Precondicion:
+        ninguno-- Duda: el identificador de los entrenadores no pueden ser iguales
+    Parametro:
+        primerEntrenador,segundoEntrenador: Entrenador
+    Tipo:
+        Entrenador
+    */
+    return(
+            choose  primerEntrenador  when    ( identificador(primerEntrenador) < identificador(segundoEntrenador) )
+                    segundoEntrenador   otherwise
+        )
+}
+
+//f)
+function elMásAntiguoEn_(listaDeEntrenadores){
+    /*
+    Proposito:
+        describe al entrenador mas antiguo entre todos los entrenadores de la lista dada
+    Precondicion:
+        tiene que haber almenos un entrenador en la lista-- Duda: el identificador de los entrenadores no pueden ser iguales
+    Parametro:
+        listaDeEntrenadores:[Entrenador]
+    Tipo:
+        Entrenador
+    */
+    
+    entrenadorActual := primero(listaDeEntrenadores)
+    foreach entrenador in listaDeEntrenadores{
+        entrenadorActual := entrenadorMásAntiguoEntre_Y_(entrenadorActual,entrenador)
+    }
+    return(entrenadorActual)
+}
+
+
+
+
+
+
+
 
 
 
