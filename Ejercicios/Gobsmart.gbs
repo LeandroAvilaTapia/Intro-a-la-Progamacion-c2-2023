@@ -1,0 +1,93 @@
+program{
+    
+}
+
+type TipoDePago is variant {
+/* PROP: modelar Tipos de pago aceptados */
+case Tarjeta {}
+case MartPago {}
+case Efectivo {}
+}
+type Producto is record{
+/* PROP: modelar productos
+INV.REP.: precio > 0 */
+field nombre // String
+field marca // String
+field precio // Número
+}
+type Cliente is record {
+/* PROP: modelar clientes */
+field dni // String
+field tipoDePago // TipoDePago
+field productos // [Producto]
+}
+type Caja is record {
+/* PROP: modelar cajas
+INV.REP.: número > 0
+facturado >= 0 */
+field número // Número
+field clientesEsperando // [Cliente]
+field aceptaPagos // [TipoDePago]
+field esRápida // Bool
+field facturado // Número
+}
+
+function cantidadDeClientesEsperandoEn_(unaCaja){
+    /*
+    Proposito:
+        Describe la cantidad de clientes que estan esperando en la caja dada
+    Precondicion:
+        ninguna
+    Tipo:Numero
+    Paramentro:
+        *unaCaja*:Caja
+    */
+    cantidadDeClientesEsperando:=0
+    foreach clientes in clientesEsperando(unaCaja){
+        cantidadDeClientesEsperando := cantidadDeClientesEsperando + 1
+    }
+    return(cantidadDeClientesEsperando)
+    
+}
+
+function cajaMenosOcupadaDe_(cajas){
+    /*
+    Proposito:
+        Describe la caja que tiene menos clientes esperando en las cajas *cajas*,si hay mas de una caja que tiene
+        la misma cantidad de clientes esperando, describe la primera que encuentre.
+    Precondicion:
+        tiene que haber al menos una caja en la lista dada
+    Tipo:Caja
+    Paramentro:
+        *cajas*:[Caja]
+    */
+    cajaConMenosClientesHastaAhora := primero(cajas)
+    foreach caja in cajas{
+        cajaConMenosClientesHastaAhora := _TieneMenosClientesEsperandoQue_(cajaConMenosClientesHastaAhora,caja)
+    }
+    return(cajaConMenosClientesHastaAhora)
+    
+}
+
+function _TieneMenosClientesEsperandoQue_(primeraCaja,segundaCaja){
+    /*
+    Proposito:
+        Describe la caja con menos clientes esperando entre las cajas dadas
+    Precondicion:
+        ninguna
+    Tipo:Caja
+    Paramentro:
+        primeraCaja,segundaCaja: Caja
+    */
+    
+    return(
+            choose  primeraCaja     when(cantidadDeClientesEsperandoEn_(primeraCaja)>= cantidadDeClientesEsperandoEn_(segundaCaja))
+                    segundaCaja     otherwise
+        )
+    
+}
+
+
+
+
+

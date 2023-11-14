@@ -10,7 +10,7 @@ program{
     entrenador2 := entrenador_ConPókemon_Agregado(entrenador2,pokemon3)
     listaDeEntrenadores := [entrenador1,entrenador2]
     return(
-        entrenadorMásAntiguoEntre_Y_(entrenador1,entrenador2)
+        entrenadorGanadorDeDesafíoEntre_Y_(entrenador1,entrenador2)
         )
 }
 
@@ -523,8 +523,84 @@ function elMásAntiguoEn_(listaDeEntrenadores){
     return(entrenadorActual)
 }
 
+//g)
+function entrenadorGanadorDeDesafíoEntre_Y_(primerEntrenador,segundoEntrenador){
+    /*
+    Proposito:
+        Describe al entrenador ganador del desafio entre los pokemones de los entrenadores dados, en caso de un
+        empate describe al entrenador con mayor antiguedad
+    Precondicion:
+        Los entrenadores tiene que tener al menos un pokemon
+    Parametro:
+        listaDeEntrenadores:[Entrenador]
+    Tipo:
+        Entrenador
+    Observaciones:
+    El desafío consiste en que compitan un Pókemon de cada entrenador hasta que
+se acaben los Pókemon de uno de ellos, resultando en batallas del primero con
+el primero, el segundo con el segundo, etc. En cada pelea entre dos Pókemon
+siempre gana el más fuerte, y si tienen igual fuerza, la pelea no cuenta para
+ninguno de los dos. Gana el desafío el entrenador que consiga ganar más
+batallas, o de haber empate en la cantidad de peleas ganadas, el de mayor
+antigüedad.
 
+    */
+    
+    pokemonesDelPrimerEntrenador := lista(primerEntrenador)
+    pokemonesDelSegundoEntrenador := lista(segundoEntrenador)
+    listaDeResultados := []
+    while (not esVacía(pokemonesDelPrimerEntrenador) && not esVacía(pokemonesDelSegundoEntrenador) ){
+        
+        listaDeResultados := listaDeResultados + [batallaEntre_Y_(primero(pokemonesDelPrimerEntrenador), primero(pokemonesDelSegundoEntrenador))]
+        
+        pokemonesDelPrimerEntrenador := resto(pokemonesDelPrimerEntrenador)
+        pokemonesDelSegundoEntrenador := resto(pokemonesDelSegundoEntrenador)
+    }
+    return(
+        choose  primerEntrenador when(cuantos_HayEn_(1, listaDeResultados) > cuantos_HayEn_(2, listaDeResultados))
+                segundoEntrenador when(cuantos_HayEn_(1, listaDeResultados) < cuantos_HayEn_(2, listaDeResultados))
+                entrenadorMásAntiguoEntre_Y_(primerEntrenador,segundoEntrenador) otherwise
+        )
+}
 
+function batallaEntre_Y_(primerPokemon,segundoPokemon){
+     /*
+    Proposito:
+        Describe un numero dependiendo de que pokemon es mas fuerte entre los pokemones dados, si tiene
+        la misma fuerza describe un 0 
+    Precondicion:
+        ninguna
+    Parametro:
+        primerPokemon,segundoPokemon:Pókemon
+    Tipo:
+        Numero
+    */
+    return(
+        choose   1    when(nivel(primerPokemon) /= nivel(segundoPokemon) && es_MásFuerteQue_(primerPokemon,segundoPokemon) )
+                 2    when(nivel(primerPokemon) /= nivel(segundoPokemon) && es_MásFuerteQue_(segundoPokemon,primerPokemon) )
+                 0    otherwise
+        )
+}
+
+function cuantos_HayEn_(numero, lista){
+    /*
+    Proposito:
+        Describe la cantidad de veces que parece en numero *numero* en la lista dada
+    Precondicion:
+        ninguna
+    Parametro:
+        primerPokemon,segundoPokemon:Pókemon
+    Tipo:
+        Numero
+    */
+    cantidadDeVeces:=0
+    foreach elemento    in lista{
+        if(elemento == numero){
+            cantidadDeVeces := cantidadDeVeces + 1
+        }
+    }
+    return(cantidadDeVeces)
+}
 
 
 

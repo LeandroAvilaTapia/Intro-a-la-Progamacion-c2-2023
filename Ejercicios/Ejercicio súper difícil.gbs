@@ -1,0 +1,223 @@
+function cantidadDeBañosEn_(multiverso){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en el multiverso *multiverso*
+    Precondicion:
+        ninguna
+    Parametro:
+        *multiverso*:[Universo]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach universo    in  multiverso{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLasGalaxias_(galaxias(universo))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLaGalaxias_(galaxias){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en las galaxias *galaxias*
+    Precondicion:
+        ninguna
+    Parametro:
+        *galaxias*:[Galaxia]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach galaxia    in  galaxias{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLosPlanetas_(planetas(galaxia))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLosPlanetas_(planetas){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los planetas *planetas*
+    Precondicion:
+        ninguna
+    Parametro:
+        *planetas*:[Planeta]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach planeta    in  planetas{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLosContinentes_(continentes(planeta))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLosContinentes_(continentes){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los continentes *continentes*
+    Precondicion:
+        ninguna
+    Parametro:
+        *continentes*:[Continente]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach continente    in  continentes{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLosPaises_(paises(continente))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLosPaises_(paises){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los paises *paises*
+    Precondicion:
+        ninguna
+    Parametro:
+        *paises*:[Pais]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach Pais    in  paises{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLasProvincias_(provincias(Pais))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLasProvincias_(provincias){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en las provincias *provincias*
+    Precondicion:
+        ninguna
+    Parametro:
+        *provincias*:[Provincia]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach provincia    in  provincias{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLasCiudades_(ciudades(provincia))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLasCiudades_(ciudades){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en las ciudades *ciudades*
+    Precondicion:
+        ninguna
+    Parametro:
+        *ciudades*:[Ciudad]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach ciudad    in  ciudades{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLosBarrios_(barrios(ciudad))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLosBarrios_(barrios){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los barrios *barrios*
+    Precondicion:
+        ninguna
+    Parametro:
+        *barrios*:[Barrio]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach barrio    in  barrios{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLasCalles_(calles(barrio))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLasCalles_(calles){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los calles *calles*
+    Precondicion:
+        ninguna
+    Parametro:
+        *calles*:[Calle]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach calle    in  calles{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLosEdificios_(edificios(calle))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLosEdificios_(edificios){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los edificios *edificios*
+    Precondicion:
+        ninguna
+    Parametro:
+        *edificios*:[Edificio]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach edificio    in  edificios{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLosPisos_(pisos(edificio))
+    }
+    return(cantidadDeBaños)
+}
+function cantidadDeBañosEnLosPisos_(pisos){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los pisos *pisos*
+    Precondicion:
+        ninguna
+    Parametro:
+        *pisos*:[Piso]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach piso    in  pisos{
+        cantidadDeBaños := cantidadDeBaños + cantidadDeBañosEnLasHabitaciones_(habitaciones(piso))
+    }
+    return(cantidadDeBaños)
+}
+
+function cantidadDeBañosEnLasHabitaciones_(habitaciones){
+    /*
+    Proposito:
+        Describe la cantidad total de baños que hay en los habitaciones *habitaciones*
+    Precondicion:
+        ninguna
+    Parametro:
+        *habitaciones*:[Habitacion]
+    Tipo:
+        Numero
+    */
+    cantidadDeBaños := 0
+    foreach habitacion    in  habitaciones{
+        cantidadDeBaños := cantidadDeBaños + unoSi_CeroSino(tipoDeHabitación(habitacion)==Baño)
+    }
+    return(cantidadDeBaños)
+}
+
+
+
+
+
+
+
+
+
