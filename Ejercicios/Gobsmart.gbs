@@ -87,6 +87,131 @@ function _TieneMenosClientesEsperandoQue_(primeraCaja,segundaCaja){
     
 }
 
+//C)
+function gobsMart_conIngresoDe_aCaja_(listaDeCajas,cliente,numeroCaja){
+    /*
+    Proposito:
+        Describe la misma lista de cajas dada pero actualizando la caja del 
+        número dado para registrar que el cliente dado ingresó en la misma
+    Precondicion:
+        la caja con el numero *numeroCaja* tiene que estar en la lista de caja *listaDeCajas*
+    Tipo:[Caja]
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *cliente*:Cliente
+        *numeroCaja*:Numero
+    */
+    listaDeCajasHastaAhora := listaDeCajas
+    primeraParteDeLaLista:=[]
+    while(not esVacía(listaDeCajasHastaAhora) && not _EsElNumeroDeLaCaja_(numeroCaja,primero(listaDeCajasHastaAhora)) ){
+        primeraParteDeLaLista := primeraParteDeLaLista ++ [primero(listaDeCajasHastaAhora)]
+        listaDeCajasHastaAhora := resto(listaDeCajasHastaAhora)
+    }
+    return(
+        primeraParteDeLaLista ++ [
+            agregarAlCliente_ALaCaja_(cliente,caja_ConNumeroModificadopPor_(primero(listaDeCajasHastaAhora),numeroCaja))
+            ] ++ resto(listaDeCajasHastaAhora)
+        )
+    
+}
+
+function agregarAlCliente_ALaCaja_(cliente,caja){
+    /*
+    Proposito:
+        Describe la caja dada con el cliente en la lista de clientes esperando
+    Precondicion:
+        ninguna
+    Tipo:
+        Caja
+    Paramentro:
+        *caja*:Caja
+        *numeroCaja*:Numero
+    */
+    return(
+            Caja(caja | clientesEsperando <- clientesEsperando(caja) ++ [cliente])
+        )
+}
+
+function caja_ConNumeroModificadopPor_(caja,numeroDeCaja){
+    /*
+    Proposito:
+        Describe la caja dada pero con el numero modificado por *numeroDeCaja*
+    Precondicion:
+        ninguna
+    Tipo:
+        Caja
+    Paramentro:
+        *caja*:Caja
+        *numeroCaja*:Numero
+    */
+    return(
+            Caja(caja | número <- numeroDeCaja)
+        )
+}
+
+function _EsElNumeroDeLaCaja_(numeroDeCaja,caja){
+    /*
+    Proposito:
+        Indica si el numero *numeroDeCaja* es el mismo de la caja dada
+    Precondicion:
+        ninguna
+    Tipo:
+        Booleano
+    Paramentro:
+        *caja*:Caja
+        *numeroCaja*:Numero
+    */
+    return(
+            numeroCaja == numero(caja)
+        )
+}
+
+
+//d
+function gobsMart_conIngresosDe_(listaDeCajas,listaDeCliente){
+    /*
+    Proposito:
+        Describe una lista de cajas actualizada, donde cada cliente de la lista
+    dada ingresó a una caja que acepta el medio de pago que posee, y que esté
+    menos ocupada en el momento que ingresa.
+    Precondicion:
+        Ninguna
+    Tipo:[Caja]
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *cliente*:[Cliente]
+    */
+    listaDeCajasHastaAhora := listaDeCajas
+    
+    foreach cliente in listaDeCliente{
+        
+        listaDeCajasHastaAhora := 
+            gobsMart_conIngresoDe_aCaja_(listaDeCajasHastaAhora,cliente,numero(cajaMenosOcupadaDe_(_ConTipoDePago_(listaDeCajas,tipoDePago(cliente)))))
+    }
+    
+    
+    return(listaDeCajasHastaAhora)
+    
+}
+
+function _ConTipoDePago_(listaDeCajas,tipoDePago){
+    /*
+    Proposito:
+        Describe la lista de cajas *listaDeCajas* pero con solamente con el tipo de pago *tipoDePago*,
+        sino hay ninguna entonces describe una lista vacia
+    Precondicion:
+        Ninguna
+    Tipo:[Caja]
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *tipoDePago*:TipoDePago
+    */
+    listaDeCajasConElTipoDePago := []
+    foreach caja    in  listaDeCajas{
+        listaDeCajasConElTipoDePago := listaDeCajasConElTipoDePago ++ singular_Si_(caja,contiene_A_(aceptaPagos(caja),TipoDePago))
+    }
+    return(listaDeCajasConElTipoDePago)
+}
 
 
 
