@@ -241,7 +241,27 @@ function longitudDe_(listaACalcular){
     }
     return(cantidadDeElemento)
 }
-
+-------------------------------------------14----------------------------
+function contiene_A_(lista,elementoAVerificar){
+    /*
+    Proposito
+        Indica si en la lista *lista* se encuentra el elemento *elementoAVerificar*
+    Precondicion
+        ninguna
+    Tipo:
+       Booleano
+    Parametro:
+        lista: [Elemento]
+        elementoAVerificar: Elemento
+    */
+    listaHastaAhora:=lista
+    
+    while(not esVacía(listaHastaAhora) && not primero(listaHastaAhora)==elementoAVerificar ){
+        listaHastaAhora:= resto(listaHastaAhora)
+    }
+    
+    return(not esVacía(listaHastaAhora) && primero(listaHastaAhora)==elementoAVerificar)
+}
 
 
 

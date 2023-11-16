@@ -31,7 +31,7 @@ field aceptaPagos // [TipoDePago]
 field esRápida // Bool
 field facturado // Número
 }
-
+-----------------------------------------------------------------------------------------------------------------
 function cantidadDeClientesEsperandoEn_(unaCaja){
     /*
     Proposito:
@@ -49,7 +49,7 @@ function cantidadDeClientesEsperandoEn_(unaCaja){
     return(cantidadDeClientesEsperando)
     
 }
-
+-----------------------------------------------------------------------------------------------------------------
 function cajaMenosOcupadaDe_(cajas){
     /*
     Proposito:
@@ -63,13 +63,13 @@ function cajaMenosOcupadaDe_(cajas){
     */
     cajaConMenosClientesHastaAhora := primero(cajas)
     foreach caja in cajas{
-        cajaConMenosClientesHastaAhora := _TieneMenosClientesEsperandoQue_(cajaConMenosClientesHastaAhora,caja)
+        cajaConMenosClientesHastaAhora := caja_TieneMenosClientesEsperandoQue_(cajaConMenosClientesHastaAhora,caja)
     }
     return(cajaConMenosClientesHastaAhora)
     
 }
 
-function _TieneMenosClientesEsperandoQue_(primeraCaja,segundaCaja){
+function caja_TieneMenosClientesEsperandoQue_(primeraCaja,segundaCaja){
     /*
     Proposito:
         Describe la caja con menos clientes esperando entre las cajas dadas
@@ -86,7 +86,7 @@ function _TieneMenosClientesEsperandoQue_(primeraCaja,segundaCaja){
         )
     
 }
-
+-----------------------------------------------------------------------------------------------------------------
 //C)
 function gobsMart_conIngresoDe_aCaja_(listaDeCajas,cliente,numeroCaja){
     /*
@@ -103,7 +103,7 @@ function gobsMart_conIngresoDe_aCaja_(listaDeCajas,cliente,numeroCaja){
     */
     listaDeCajasHastaAhora := listaDeCajas
     primeraParteDeLaLista:=[]
-    while(not esVacía(listaDeCajasHastaAhora) && not _EsElNumeroDeLaCaja_(numeroCaja,primero(listaDeCajasHastaAhora)) ){
+    while(not esVacía(listaDeCajasHastaAhora) && not es_ElNumeroDeLaCaja_(numeroCaja,primero(listaDeCajasHastaAhora)) ){
         primeraParteDeLaLista := primeraParteDeLaLista ++ [primero(listaDeCajasHastaAhora)]
         listaDeCajasHastaAhora := resto(listaDeCajasHastaAhora)
     }
@@ -149,7 +149,7 @@ function caja_ConNumeroModificadopPor_(caja,numeroDeCaja){
         )
 }
 
-function _EsElNumeroDeLaCaja_(numeroDeCaja,caja){
+function es_ElNumeroDeLaCaja_(numeroDeCaja,caja){
     /*
     Proposito:
         Indica si el numero *numeroDeCaja* es el mismo de la caja dada
@@ -162,11 +162,11 @@ function _EsElNumeroDeLaCaja_(numeroDeCaja,caja){
         *numeroCaja*:Numero
     */
     return(
-            numeroCaja == numero(caja)
+            numeroCaja == número(caja)
         )
 }
 
-
+------------------------------------------------------------------------------------------------------------------
 //d
 function gobsMart_conIngresosDe_(listaDeCajas,listaDeCliente){
     /*
@@ -186,7 +186,7 @@ function gobsMart_conIngresosDe_(listaDeCajas,listaDeCliente){
     foreach cliente in listaDeCliente{
         
         listaDeCajasHastaAhora := 
-            gobsMart_conIngresoDe_aCaja_(listaDeCajasHastaAhora,cliente,numero(cajaMenosOcupadaDe_(_ConTipoDePago_(listaDeCajas,tipoDePago(cliente)))))
+            gobsMart_conIngresoDe_aCaja_(listaDeCajasHastaAhora,cliente,número(cajaMenosOcupadaDe_(cajas_ConTipoDePago_(listaDeCajas,tipoDePago(cliente)))))
     }
     
     
@@ -194,7 +194,7 @@ function gobsMart_conIngresosDe_(listaDeCajas,listaDeCliente){
     
 }
 
-function _ConTipoDePago_(listaDeCajas,tipoDePago){
+function cajas_ConTipoDePago_(listaDeCajas,tipoDePago){
     /*
     Proposito:
         Describe la lista de cajas *listaDeCajas* pero con solamente con el tipo de pago *tipoDePago*,
@@ -212,6 +212,237 @@ function _ConTipoDePago_(listaDeCajas,tipoDePago){
     }
     return(listaDeCajasConElTipoDePago)
 }
+
+function contiene_A_(lista,elementoAVerificar){
+    /*
+    Proposito
+        Indica si en la lista *lista* se encuentra el elemento *elementoAVerificar*
+    Precondicion
+        ninguna
+    Tipo:
+       Booleano
+    Parametro:
+        lista: [Elemento]
+        elementoAVerificar: Elemento
+    */
+    listaHastaAhora:=lista
+    
+    while(not esVacía(listaHastaAhora) && not primero(listaHastaAhora)==elementoAVerificar ){
+        listaHastaAhora:= resto(listaHastaAhora)
+    }
+    
+    return(not esVacía(listaHastaAhora) && primero(listaHastaAhora)==elementoAVerificar)
+}
+--------------------------------------------------- E) ---------------------------------------------------------------
+
+
+function sumatoriaDe_(listaDeNúmeros){
+/*PROPÓSITO: Describe la suma de todos los elementos de la lista dada, si la lista es
+vacía devuelve 0.
+PRECONDICIONES: ninguna
+PARÁMETROS: *listaDeNúmeros*:[Numero]
+RESULTADO: Número.
+*/
+    sumatoria:=0
+    foreach numero in listaDeNúmeros{
+        sumatoria := sumatoria + numero
+    }
+    return(sumatoria)
+}
+
+
+function caja_conPrimeroFacturado(caja){
+    /*
+    Proposito:
+        Describe la caja resultante de facturar al primero de los clientes de la caja dada
+        (o sea, el cliente se retiró y la caja actualizó sus datos).
+    Precondicion:
+        Ninguna
+    Tipo:[Caja]
+    Paramentro:
+        *caja*:Caja
+    Observaciones:
+        Se puede suponer que el cliente eligió bien la caja
+        de acuerdo a su tipo de pago.
+    */
+    listaDeClientesDeLaCaja := clientesEsperando(caja)
+    montoFacturado:=0
+    if(not esVacía(listaDeCajasHastaAhora)){
+        montoFacturado := montoTotalDelCliente_(primero(listaDeCajasHastaAhora))
+    }
+    
+    return(
+        Caja(caja | facturado <- facturado(caja) + montoFacturado,clientesEsperando <- resto(listaDeClientesDeLaCaja))
+        )
+}
+
+function montoTotalDelCliente_(cliente){
+    /*
+    Proposito:
+        Describe el monto total de los productos que tiene el cliente dada.
+    Precondicion:
+        Ninguna
+    Tipo:
+        Numero
+    Paramentro:
+        cliente:Cliente
+    */
+    montoFacturadoHastaAhora := 0
+    foreach producto in productos(cliente){
+        montoFacturadoHastaAhora := montoFacturadoHastaAhora + precio(producto)
+    }
+    
+    return(montoFacturadoHastaAhora)
+}
+
+--------------------------------------------------- F) ---------------------------------------------------------------
+function gobsMart_conCliente_cambiaACaja_(listaDeCajas,dniCliente,numeroDeCaja){
+    /*
+    Proposito:
+        Describe la lista de cliente dada actualizada, cambiando al cliente con el dni *dniCliente* a la caja con el numero *numeroDeCaja*
+    Precondicion:
+        El cliente con el dni dado tiene que estar en alguna caja de la lista dada
+    Tipo:
+        [Caja]
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *dniCliente*:String
+        *numeroDeCaja*:Numero
+    */
+    cajaConElCliente := clienteConElDni_EnLasCajas_(dniCliente,listaDeCajas) //solo lo pongo en una variable para que quede mas claro
+    
+    return(
+        gobsMart_conIngresoDe_aCaja_(gobsMart_conEgresoDe_aCaja_(listaDeCajas,cajaConElCliente,numeroCaja),cajaConElCliente,numeroCaja)
+        )
+    
+}
+
+function gobsMart_conEgresoDe_aCaja_(listaDeCajas,cliente,numeroCaja){
+    /*
+    Proposito:
+        Describe la misma lista de cajas dada pero actualizando la caja del 
+        número *numeroCaja* para sacar al cliente *cliente* que estaba en la misma
+    Precondicion:
+        la caja con el numero *numeroCaja* tiene que estar en la lista de caja *listaDeCajas*
+    Tipo:[Caja]
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *cliente*:Cliente
+        *numeroCaja*:Numero
+    */
+    listaDeCajasHastaAhora := []
+    foreach caja in listaDeCajas{
+        listaDeCajasHastaAhora := listaDeCajasHastaAhora ++ sinCliente_SiCaja_Es_(cliente,caja,numeroCaja)    
+    }
+    
+    return(listaDeCajasHastaAhora)
+}
+
+function sinCliente_SiCaja_Es_(cliente,caja,numeroCaja){
+    /*
+    Proposito:
+        Describe la caja *caja* con el numero *numeroCaja* sin el cliente *cliente*, sino describe la caja *caja*
+        sin modificaciones
+    Precondicion:
+        ninguna
+    Tipo:Caja
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *cliente*:Cliente
+        *numeroCaja*:Numero
+    */
+    
+    return(
+            choose  sinCliente_EnLaCaja_  when( número(caja) == numeroCaja )
+                    caja    otherwise
+        )
+}
+
+function sinCliente_EnLaCaja_(clienteASacar,caja){
+    /*
+    Proposito:
+        Describe la caja *caja* sin el cliente *cliente*
+    Precondicion:
+        El cliente *cliente* tiene que estar en la caja dada
+    Tipo:Caja
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *clienteASacar*:Cliente
+    */
+    clientesEsperandoHastaAhora:=[]
+    foreach cliente in clientesEsperando(caja){
+        clientesEsperandoHastaAhora := clientesEsperandoHastaAhora ++ singular_Si_(cliente, dni(clienteASacar) /= dni(cliente))
+    }
+    return(clientesEsperandoHastaAhora)
+}
+
+function clienteConElDni_EnLasCajas_(dniCliente,listaDeCajas){
+    /*
+    Proposito:
+        Describe el cliente con el dni *dniCliente* que se encuentra en la lista *listaDeCajas*, sino
+        lo encuentra describe una lista vacia
+    Precondicion:
+        El cliente con el dni *dniCliente* tiene que estar en alguna caja de la lista dada
+    Tipo:
+        Cliente
+    Paramentro:
+        *listaDeCajas*:[Caja]
+        *dniCliente*:String
+    */
+    listaDeCajasHastaAhora := listaDeCajas
+    clientesEsperandoCaja :=[]
+    while(not esVacía(listaDeCajasHastaAhora) && esVacía(clientesEsperandoCaja)){
+        clientesEsperandoCaja := clientesEsperandoCaja ++ clienteConElDni_EnListaDeEspera_(dniCliente,clientesEsperando(primero(listaDeCajasHastaAhora)))
+        listaDeCajasHastaAhora := resto(listaDeCajasHastaAhora)
+    }
+    
+    return(primero(clientesEsperandoCaja))
+}
+function clienteConElDni_EnListaDeEspera_(dniCliente,clientesEsperando){
+    /*
+    Proposito:
+        Describe el cliente con el dni *dniCliente* que se encuentra en la lista *clientesEsperando*, sino
+        lo encuentra describe una lista vacia
+    Precondicion:
+        ninguna
+    Tipo:
+        [Cliente]
+    Paramentro:
+        *listaDeCajas*:[Cliente]
+        *dniCliente*:String
+    */
+    clienteEsperando:=[]
+    foreach cliente in clientesEsperando{
+        clienteEsperando := clienteEsperando ++ singular_Si_(cliente,esCliente_ConDni_(cliente,dniCliente))
+    }
+    return(clienteEsperando)
+} 
+
+function esCliente_ConDni_(cliente,dni){
+    /*
+    Proposito:
+        Indica si el cliente dado tiene el dni dado
+    Precondicion:
+    ninguna
+    Tipo:
+        Booleano
+    Paramentro:
+        *cliente*:Cliente
+        *dni*:String
+    */
+    return(
+        dni(cliente) == dni
+        )
+}
+
+
+
+
+
+
+
+
+
 
 
 
