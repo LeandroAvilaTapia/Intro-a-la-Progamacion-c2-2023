@@ -1,5 +1,20 @@
 program{
-    
+    producto1 := Producto(nombre <- "jabon",marca <- "Dove",precio <- 23)
+    producto2 := Producto(nombre <- "aceite",marca <- "Marolio",precio <- 55)
+    producto3 := Producto(nombre <- "pan",marca <- "Bimbo",precio <- 122)
+    listaProductos1 := [producto1,producto2,producto3]
+    listaProductos2 := [producto1,producto3]
+    cliente1 := Cliente(dni <- "12-222-333", tipoDePago <- Tarjeta, productos <- listaProductos1)
+    cliente2 := Cliente(dni <- "19-111-555", tipoDePago <- Efectivo, productos <- listaProductos2)
+    cliente3 := Cliente(dni <- "11-123-456", tipoDePago <- Tarjeta, productos <- listaProductos1)
+    listaDeClientes1 := [cliente1,cliente2]
+    listaDeClientes2 := [cliente3]
+    caja1 := Caja(número <- 123, clientesEsperando <- listaDeClientes1,aceptaPagos <- [Tarjeta,Efectivo],esRápida <- True,facturado <- 1)
+    caja2 := Caja(número <- 225, clientesEsperando <- listaDeClientes2,aceptaPagos <- [Tarjeta,Efectivo],esRápida <- True,facturado <- 1)
+    listaDeCajas:=[caja1,caja2]
+    return(
+        gobsMart_conCliente_cambiaACaja_(listaDeCajas,"11-123-456",123)
+        )
 }
 
 type TipoDePago is variant {
@@ -101,18 +116,33 @@ function gobsMart_conIngresoDe_aCaja_(listaDeCajas,cliente,numeroCaja){
         *cliente*:Cliente
         *numeroCaja*:Numero
     */
-    listaDeCajasHastaAhora := listaDeCajas
-    primeraParteDeLaLista:=[]
-    while(not esVacía(listaDeCajasHastaAhora) && not es_ElNumeroDeLaCaja_(numeroCaja,primero(listaDeCajasHastaAhora)) ){
-        primeraParteDeLaLista := primeraParteDeLaLista ++ [primero(listaDeCajasHastaAhora)]
-        listaDeCajasHastaAhora := resto(listaDeCajasHastaAhora)
-    }
-    return(
-        primeraParteDeLaLista ++ [
-            agregarAlCliente_ALaCaja_(cliente,caja_ConNumeroModificadopPor_(primero(listaDeCajasHastaAhora),numeroCaja))
-            ] ++ resto(listaDeCajasHastaAhora)
-        )
     
+    listaDeCajasHastaAhora:=[]
+    
+    foreach caja in listaDeCajas{
+        listaDeCajasHastaAhora := listaDeCajasHastaAhora ++ [siCaja_conIngresoDe_aCaja_(caja,cliente,numeroCaja)]
+    }
+    
+    return(listaDeCajasHastaAhora)
+    
+}
+
+function siCaja_conIngresoDe_aCaja_(caja,cliente,numeroCaja){
+    /*
+    Proposito:
+        Describe la caja *caja* con el cliente agregado si tiene el numero *numeroCaja*, sino describe la misma caja dada
+    Precondicion:
+    Ninguna
+    Tipo:Caja
+    Paramentro:
+        *listaDeCajas*:Caja
+        *cliente*:Cliente
+        *numeroCaja*:Numero
+    */
+    return(
+        choose  agregarAlCliente_ALaCaja_(cliente,caja) when(número(caja)==numeroCaja)
+                caja    otherwise
+        )
 }
 
 function agregarAlCliente_ALaCaja_(cliente,caja){
@@ -129,40 +159,6 @@ function agregarAlCliente_ALaCaja_(cliente,caja){
     */
     return(
             Caja(caja | clientesEsperando <- clientesEsperando(caja) ++ [cliente])
-        )
-}
-
-function caja_ConNumeroModificadopPor_(caja,numeroDeCaja){
-    /*
-    Proposito:
-        Describe la caja dada pero con el numero modificado por *numeroDeCaja*
-    Precondicion:
-        ninguna
-    Tipo:
-        Caja
-    Paramentro:
-        *caja*:Caja
-        *numeroCaja*:Numero
-    */
-    return(
-            Caja(caja | número <- numeroDeCaja)
-        )
-}
-
-function es_ElNumeroDeLaCaja_(numeroDeCaja,caja){
-    /*
-    Proposito:
-        Indica si el numero *numeroDeCaja* es el mismo de la caja dada
-    Precondicion:
-        ninguna
-    Tipo:
-        Booleano
-    Paramentro:
-        *caja*:Caja
-        *numeroCaja*:Numero
-    */
-    return(
-            numeroCaja == número(caja)
         )
 }
 
@@ -208,7 +204,7 @@ function cajas_ConTipoDePago_(listaDeCajas,tipoDePago){
     */
     listaDeCajasConElTipoDePago := []
     foreach caja    in  listaDeCajas{
-        listaDeCajasConElTipoDePago := listaDeCajasConElTipoDePago ++ singular_Si_(caja,contiene_A_(aceptaPagos(caja),TipoDePago))
+        listaDeCajasConElTipoDePago := listaDeCajasConElTipoDePago ++ singular_Si_(caja,contiene_A_(aceptaPagos(caja),tipoDePago))
     }
     return(listaDeCajasConElTipoDePago)
 }
@@ -232,6 +228,25 @@ function contiene_A_(lista,elementoAVerificar){
     }
     
     return(not esVacía(listaHastaAhora) && primero(listaHastaAhora)==elementoAVerificar)
+}
+
+function singular_Si_(unElemento,condicion){
+    /*
+    Prop:
+        Describe una lista singular con *unElemento* si se cumple
+        la condicion, sino describe una lista vacia
+    Precondicion:
+        ninguna
+    Parametro
+    *unElemento*:Elemento
+    *condicion*:Booleano
+    
+    */
+    
+    return(
+            choose [unElemento] when (condicion)
+                    []          otherwise
+        )
 }
 --------------------------------------------------- E) ---------------------------------------------------------------
 
@@ -309,15 +324,15 @@ function gobsMart_conCliente_cambiaACaja_(listaDeCajas,dniCliente,numeroDeCaja){
         *dniCliente*:String
         *numeroDeCaja*:Numero
     */
-    cajaConElCliente := clienteConElDni_EnLasCajas_(dniCliente,listaDeCajas) //solo lo pongo en una variable para que quede mas claro
+    cliente := clienteConElDni_EnLasCajas_(dniCliente,listaDeCajas) //solo lo pongo en una variable para que quede mas claro
     
     return(
-        gobsMart_conIngresoDe_aCaja_(gobsMart_conEgresoDe_aCaja_(listaDeCajas,cajaConElCliente,numeroCaja),cajaConElCliente,numeroCaja)
+        gobsMart_conIngresoDe_aCaja_(gobsMart_conEgresoDe_aCaja_(listaDeCajas,cliente),cliente,numeroDeCaja)
         )
     
 }
 
-function gobsMart_conEgresoDe_aCaja_(listaDeCajas,cliente,numeroCaja){
+function gobsMart_conEgresoDe_aCaja_(listaDeCajas,cliente){
     /*
     Proposito:
         Describe la misma lista de cajas dada pero actualizando la caja del 
@@ -332,13 +347,13 @@ function gobsMart_conEgresoDe_aCaja_(listaDeCajas,cliente,numeroCaja){
     */
     listaDeCajasHastaAhora := []
     foreach caja in listaDeCajas{
-        listaDeCajasHastaAhora := listaDeCajasHastaAhora ++ sinCliente_SiCaja_Es_(cliente,caja,numeroCaja)    
+        listaDeCajasHastaAhora := listaDeCajasHastaAhora ++ sinCliente_SiCaja_Es_(cliente,caja)
     }
     
     return(listaDeCajasHastaAhora)
 }
 
-function sinCliente_SiCaja_Es_(cliente,caja,numeroCaja){
+function sinCliente_SiCaja_Es_(cliente,caja){
     /*
     Proposito:
         Describe la caja *caja* con el numero *numeroCaja* sin el cliente *cliente*, sino describe la caja *caja*
@@ -353,8 +368,8 @@ function sinCliente_SiCaja_Es_(cliente,caja,numeroCaja){
     */
     
     return(
-            choose  sinCliente_EnLaCaja_  when( número(caja) == numeroCaja )
-                    caja    otherwise
+            choose  [sinCliente_EnLaCaja_(cliente,caja)]  when( contiene_A_(clientesEsperando(caja),cliente) )
+                    [caja]    otherwise
         )
 }
 
@@ -373,9 +388,9 @@ function sinCliente_EnLaCaja_(clienteASacar,caja){
     foreach cliente in clientesEsperando(caja){
         clientesEsperandoHastaAhora := clientesEsperandoHastaAhora ++ singular_Si_(cliente, dni(clienteASacar) /= dni(cliente))
     }
-    return(clientesEsperandoHastaAhora)
+    return(Caja(caja | clientesEsperando <- clientesEsperandoHastaAhora))
 }
-
+------------------------
 function clienteConElDni_EnLasCajas_(dniCliente,listaDeCajas){
     /*
     Proposito:
@@ -434,11 +449,62 @@ function esCliente_ConDni_(cliente,dni){
         dni(cliente) == dni
         )
 }
+----------------------------------- G ------------------------------
+function fila_ConAumentoDePrecioAMarolio(clientes){
+    /*
+    Proposito:
+        Describe la lista de clientes dada donde se aumente en 10 pesos todos los
+        productos de la marca “Marolio” que tengan en su poder.
+    Precondicion:
+        ninguna
+    Tipo:
+        [Cliente]
+    Paramentro:
+        *clientes*:[Cliente]
+    */
+    clientesHastaAhora:= []
+    foreach cliente in clientes{
+        clientesHastaAhora := clientesHastaAhora ++ [Cliente(cliente | productos <- productos_ConAumentoDePrecioAMarolio(productos(cliente)))]
+    }
+    return(clientesHastaAhora)
+}
 
+function productos_ConAumentoDePrecioAMarolio(productos){
+    /*
+    Proposito:
+        Describe la lista de productos dada donde se aumente en 10 pesos todos los
+        productos de la marca “Marolio” que tengan en su poder.
+    Precondicion:
+        ninguna
+    Tipo:
+        [Producto]
+    Paramentro:
+        *productos*:[Producto]
+    */
+    productosHastaAhora:= []
+    foreach producto in productos{
+        productosHastaAhora := productosHastaAhora ++ [producto_ConAumentoDePrecioAMarolio(producto)]
+    }
+    return(productosHastaAhora)
+}
 
-
-
-
+function producto_ConAumentoDePrecioAMarolio(producto){
+    /*
+    Proposito:
+        Describe el producto dada donde se aumente en 10 pesos si es de la marca “Marolio” sino describe el producto dado
+    Precondicion:
+        ninguna
+    Tipo:
+        Producto
+    Paramentro:
+        *producto*:Producto
+    */
+    
+    return(
+        choose  Producto(producto | precio <- precio(producto) + 10) when (marca(producto) == "Dove")
+                producto    otherwise
+        )
+}
 
 
 
