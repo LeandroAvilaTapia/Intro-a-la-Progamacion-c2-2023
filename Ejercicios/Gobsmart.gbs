@@ -332,18 +332,16 @@ function gobsMart_conCliente_cambiaACaja_(listaDeCajas,dniCliente,numeroDeCaja){
     
 }
 
-function gobsMart_conEgresoDe_aCaja_(caja,listaDeCajas,cliente){
+function gobsMart_conEgresoDe_aCaja_(listaDeCajas,cliente){
     /*
     Proposito:
-        Describe la misma lista de cajas dada pero actualizando la caja del 
-        número *numeroCaja* para sacar al cliente *cliente* que estaba en la misma
+        Describe la misma lista de cajas dada pero actualizando la caja que contenga al cliente dada
     Precondicion:
         la caja con el numero *numeroCaja* tiene que estar en la lista de caja *listaDeCajas*
     Tipo:[Caja]
     Paramentro:
         *listaDeCajas*:[Caja]
         *cliente*:Cliente
-        *numeroCaja*:Numero
     */
     listaDeCajasHastaAhora := []
     foreach caja in listaDeCajas{
